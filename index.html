@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VittaFlow - Seu Fluxo de Saúde</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .progress-transition { transition: width 0.5s ease-in-out; }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans text-slate-800 pb-28">
+
+    <header class="bg-white p-6 shadow-sm border-b border-slate-100">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center text-white font-bold">V</div>
+            <h1 class="text-2xl font-bold text-green-600 tracking-tight">VittaFlow</h1>
+        </div>
+        <p id="dica-texto" class="text-sm text-slate-500 mt-2 italic">Carregando dica do dia...</p>
+    </header>
+
+    <main class="p-4 max-w-md mx-auto space-y-6">
+        
+        <section class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+            <div class="flex justify-between mb-2 items-center">
+                <h2 class="font-bold text-slate-700 text-lg">Meta Calórica</h2>
+                <span id="porcentagem-texto" class="text-sm font-bold text-green-600 bg-green-50 px-2 py-1 rounded">0%</span>
+            </div>
+            <div class="w-full bg-slate-200 rounded-full h-4 overflow-hidden">
+                <div id="barra-progresso" class="bg-green-500 h-4 progress-transition" style="width: 0%"></div>
+            </div>
+            <div class="grid grid-cols-2 gap-4 mt-6">
+                <div class="text-center">
+                    <span id="total-ingerido" class="block text-2xl font-bold text-slate-800">0</span>
+                    <span class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Kcal Ingeridas</span>
+                </div>
+                <div class="text-center border-l border-slate-100">
+                    <span id="total-gasto" class="block text-2xl font-bold text-blue-600">0</span>
+                    <span class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Kcal Gastas</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-blue-500 p-5 rounded-2xl text-white shadow-lg flex justify-between items-center">
+            <div>
+                <h3 class="font-bold flex items-center gap-2">💧 Hidratação</h3>
+                <p class="text-xs opacity-90" id="meta-agua-texto">Meta: 10 copos</p>
+                <div id="container-agua" class="mt-2 text-xl flex flex-wrap gap-1"></div>
+            </div>
+            <button onclick="adicionarAgua()" class="bg-white text-blue-600 w-12 h-12 rounded-full font-bold shadow-xl active:scale-95 transition">+</button>
+        </section>
+
+        <section>
+            <h2 class="text-lg font-bold mb-3 flex items-center gap-2">🏋️ Treino VittaFlow</h2>
+            <div class="space-y-3">
+                <div class="flex items-center bg-white p-4 rounded-xl shadow-sm border border-transparent">
+                    <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center text-xl mr-4">🏃</div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-sm">Polichinelos</h3>
+                        <p class="text-xs text-slate-500">3 séries de 30s (+50 kcal)</p>
+                    </div>
+                    <input type="checkbox" id="exe-1" onchange="alternarExercicio(this, 'exe-1', 50)" class="w-6 h-6 rounded-full text-green-600">
+                </div>
+                <div class="flex items-center bg-white p-4 rounded-xl shadow-sm border border-transparent">
+                    <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center text-xl mr-4">🏋️</div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-sm">Agachamento</h3>
+                        <p class="text-xs text-slate-500">3 séries de 12 reps (+80 kcal)</p>
+                    </div>
+                    <input type="checkbox" id="exe-2" onchange="alternarExercicio(this, 'exe-2', 80)" class="w-6 h-6 rounded-full text-green-600">
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="text-lg font-bold mb-3">🥗 Cozinha VittaFlow</h2>
+            <div id="lista-receitas" class="flex gap-4 overflow-x-auto pb-4 scrollbar-hide"></div>
+        </section>
+
+        <section class="bg-white p-5 rounded-2xl border border-slate-100">
+            <h2 class="font-bold text-slate-800 text-sm mb-2 uppercase tracking-widest">Sobre o Projeto</h2>
+            <p class="text-xs text-slate-500 leading-relaxed">
+                O <strong>VittaFlow</strong> simplifica sua saúde. Tecnologia para monitorar seu fluxo de energia diário e garantir seu bem-estar.
+            </p>
+        </section>
+
+        <section class="bg-slate-200 p-5 rounded-2xl">
+            <h2 class="font-bold text-sm mb-3">⚙️ Configurações</h2>
+            <div class="flex gap-2">
+                <input type="number" id="input-meta" class="flex-1 p-2 rounded-lg outline-none" placeholder="Meta Kcal">
+                <button onclick="salvarNovaMeta()" class="bg-slate-800 text-white px-4 rounded-lg text-sm font-bold">Salvar</button>
+            </div>
+        </section>
+
+        <button onclick="compartilharNoZap()" class="w-full bg-[#25D366] text-white py-4 rounded-2xl font-bold shadow-lg flex items-center justify-center gap-2 mt-4 active:scale-95 transition">
+            <span>📲</span> Compartilhar no WhatsApp
+        </button>
+
+        <button onclick="resetarDia()" class="w-full text-slate-400 text-[10px] mt-4 uppercase tracking-widest font-bold">Reiniciar Sistema</button>
+
+    </main>
+
+    <script>
+        let estadoUsuario = JSON.parse(localStorage.getItem('vittaFlowData')) || {
+            caloriasIngeridas: 0,
+            caloriasGastas: 0,
+            objetivoDiario: 2000,
+            coposAgua: 0,
+            exerciciosConcluidos: []
+        };
+
+        const dicasSaude = [
+            "💧 Beba 200ml de água agora!",
+            "🍎 Frutas cítricas ajudam na digestão.",
+            "🧘 Respire fundo por 2 minutos.",
+            "🚶 Use as escadas hoje no VittaFlow!",
+            "😴 O descanso faz parte do seu fluxo."
+        ];
+
+        const receitas = [
+            { id: "r1", nome: "Omelete Fit", cal: 250, icon: "🍳" },
+            { id: "r2", nome: "Bowl Iogurte", cal: 180, icon: "🍓" },
+            { id: "r3", nome: "Frango Grelhado", cal: 350, icon: "🍗" }
+        ];
+
+        function salvarDados() {
+            localStorage.setItem('vittaFlowData', JSON.stringify(estadoUsuario));
+        }
+
+        function atualizarPainel() {
+            document.getElementById('total-ingerido').innerText = estadoUsuario.caloriasIngeridas;
+            document.getElementById('total-gasto').innerText = estadoUsuario.caloriasGastas;
+            
+            const meta = estadoUsuario.objetivoDiario;
+            let porcentagem = Math.round((estadoUsuario.caloriasIngeridas / meta) * 100);
+            if (porcentagem > 100) porcentagem = 100;
+
+            const barra = document.getElementById('barra-progresso');
+            barra.style.width = porcentagem + "%";
+            document.getElementById('porcentagem-texto').innerText = porcentagem + "%";
+            
+            if(porcentagem >= 100) barra.classList.replace('bg-green-500', 'bg-orange-500');
+            else barra.classList.replace('bg-orange-500', 'bg-green-500');
+        }
+
+        function adicionarAgua() {
+            estadoUsuario.coposAgua++;
+            renderizarAgua();
+            salvarDados();
+        }
+
+        function renderizarAgua() {
+            const cont = document.getElementById('container-agua');
+            cont.innerHTML = "💧".repeat(estadoUsuario.coposAgua);
+        }
+
+        function alternarExercicio(cb, id, cal) {
+            if (cb.checked) {
+                estadoUsuario.caloriasGastas += cal;
+                estadoUsuario.exerciciosConcluidos.push(id);
+            } else {
+                estadoUsuario.caloriasGastas -= cal;
+                estadoUsuario.exerciciosConcluidos = estadoUsuario.exerciciosConcluidos.filter(i => i !== id);
+            }
+            atualizarPainel();
+            salvarDados();
+        }
+
+        function confirmarRefeicao(cal) {
+            estadoUsuario.caloriasIngeridas += cal;
+            atualizarPainel();
+            salvarDados();
+        }
+
+        function salvarNovaMeta() {
+            const v = document.getElementById('input-meta').value;
+            if(v > 500) {
+                estadoUsuario.objetivoDiario = parseInt(v);
+                salvarDados();
+                atualizarPainel();
+                alert("Sua meta VittaFlow foi atualizada!");
+            }
+        }
+
+        function compartilharNoZap() {
+            const msg = `🚀 *Meu Fluxo de Saúde no VittaFlow*:%0A🥗 Ingerido: ${estadoUsuario.caloriasIngeridas}kcal%0A🏃 Gasto: ${estadoUsuario.caloriasGastas}kcal%0A💧 Água: ${estadoUsuario.coposAgua} copos%0A🎯 Meta: ${estadoUsuario.objetivoDiario}kcal`;
+            window.open(`https://api.whatsapp.com/send?text=${msg}`, '_blank');
+        }
+
+        function resetarDia() {
+            if(confirm("Reiniciar o VittaFlow hoje?")) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+
+        window.onload = () => {
+            atualizarPainel();
+            renderizarAgua();
+            document.getElementById('input-meta').value = estadoUsuario.objetivoDiario;
+            document.getElementById('dica-texto').innerText = dicasSaude[Math.floor(Math.random()*dicasSaude.length)];
+            
+            const recCont = document.getElementById('lista-receitas');
+            receitas.forEach(r => {
+                recCont.innerHTML += `
+                    <div class="min-w-[160px] bg-white p-4 rounded-xl shadow-sm border border-slate-100 text-center">
+                        <span class="text-2xl">${r.icon}</span>
+                        <h3 class="font-bold text-xs mt-2">${r.nome}</h3>
+                        <p class="text-[10px] text-green-600 font-bold">${r.cal} kcal</p>
+                        <button onclick="confirmarRefeicao(${r.cal})" class="mt-2 bg-green-500 text-white text-[10px] px-2 py-1 rounded-md">Add</button>
+                    </div>`;
+            });
+
+            estadoUsuario.exerciciosConcluidos.forEach(id => {
+                const el = document.getElementById(id);
+                if(el) el.checked = true;
+            });
+        };
+    </script>
+</body>
+  </html>
+  
