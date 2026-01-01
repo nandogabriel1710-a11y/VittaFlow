@@ -3,166 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Nexus v21.2 - Neural HyperDrive</title>
+    <title>Nexus v21.4 - Sovereign Final</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root { --accent: #06b6d4; --bg: #020617; --pro: #f59e0b; }
-        body { background: var(--bg); color: white; margin: 0; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; overflow-x: hidden; }
-        
+        :root { --accent: #06b6d4; --bg: #020617; }
+        body { background: var(--bg); color: white; margin: 0; font-family: 'Inter', sans-serif; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
         .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.08); }
         
-        /* ACELERAÇÃO DE BOOT: Transição HyperDrive */
+        /* Splash Screen HyperDrive */
         #splash-screen {
             position: fixed; inset: 0; background: var(--bg); z-index: 10000;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            transition: transform 0.4s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.3s ease;
+            transition: transform 0.4s cubic-bezier(0.77, 0, 0.175, 1);
         }
-        .hide-splash { transform: translateY(-100%); opacity: 0; pointer-events: none; }
-
-        .scanner-line {
-            width: 180px; height: 2px; background: var(--accent);
-            box-shadow: 0 0 20px var(--accent);
-            position: absolute; animation: scan 0.7s infinite ease-in-out;
-        }
-        @keyframes scan { 0%, 100% { transform: translateY(-45px); opacity: 0.1; } 50% { transform: translateY(45px); opacity: 1; } }
+        .hide-splash { transform: translateY(-100%); pointer-events: none; }
         
-        /* TOAST SYSTEM (v21) */
+        /* Trava de Segurança Alpha */
+        #alpha-lock {
+            position: fixed; inset: 0; background: var(--bg); z-index: 20000;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px;
+        }
+
         #toast {
             position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
             padding: 12px 24px; border-radius: 100px; font-size: 10px; font-weight: 900;
-            text-transform: uppercase; letter-spacing: 2px; z-index: 10001;
-            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            text-transform: uppercase; z-index: 30001; transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
         .toast-active { top: 30px !important; }
-
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: fadeInUp 0.3s ease-out; }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .nav-active { color: var(--accent) !important; transform: translateY(-4px); filter: drop-shadow(0 0 10px var(--accent)); }
     </style>
 </head>
 <body class="pb-32">
 
-    <div id="toast" class="bg-cyan-500 text-slate-950 shadow-[0_0_20px_rgba(6,182,212,0.5)]">Sincronizado</div>
+    <div id="toast" class="bg-cyan-500 text-slate-950 shadow-lg">Sincronizado</div>
+
+    <div id="alpha-lock" class="hidden text-center p-8">
+        <div class="w-20 h-20 bg-cyan-500/10 rounded-3xl flex items-center justify-center mb-8 border border-cyan-500/20 mx-auto">
+            <span class="text-3xl text-cyan-500">🔒</span>
+        </div>
+        <h2 class="text-2xl font-black uppercase mb-2">Acesso Restrito</h2>
+        <p class="text-[10px] text-slate-500 uppercase tracking-widest mb-8 italic">Versão Alpha Sovereign</p>
+        
+        <div class="glass p-6 rounded-[2rem] w-full max-w-xs mx-auto mb-6">
+            <input type="text" id="alpha-key" placeholder="CHAVE DE ACESSO" class="w-full bg-transparent text-center text-lg font-black outline-none placeholder:text-slate-800 uppercase tracking-widest">
+        </div>
+        
+        <button onclick="verificarChave()" class="w-full max-w-xs bg-cyan-600 py-5 rounded-2xl font-black text-[10px] uppercase shadow-xl active:scale-95 transition-all mb-6">Autenticar Sistema</button>
+        <p class="text-[9px] text-slate-400">Adquira o link antecipado: <br> <a href="https://wa.me/5511994025686?text=Quero+minha+chave+Alpha" class="text-cyan-500 font-black">SOLICITAR CHAVE (R$ 5,00)</a></p>
+    </div>
 
     <div id="splash-screen">
-        <div class="relative w-36 h-36 flex items-center justify-center border-2 border-cyan-500/10 rounded-[2.5rem]">
-            <div class="scanner-line"></div>
-            <span class="text-5xl font-black text-cyan-500 italic">N</span>
+        <div class="w-24 h-24 border border-cyan-500/20 rounded-3xl flex items-center justify-center relative overflow-hidden">
+            <div class="absolute inset-0 bg-cyan-500/5 animate-pulse"></div>
+            <span class="text-4xl font-black text-cyan-500 italic relative z-10">N</span>
         </div>
-        <p class="mt-10 text-[9px] font-black uppercase tracking-[0.5em] text-cyan-500/60 font-mono">Neural HyperDrive</p>
     </div>
 
     <header class="p-5 flex justify-between items-center sticky top-0 z-50 bg-slate-950/80 backdrop-blur-xl border-b border-white/5">
         <div class="flex items-center gap-4">
-            <div onclick="abrirAdmin()" class="w-12 h-12 bg-cyan-500 rounded-2xl flex items-center justify-center font-black text-slate-950 shadow-lg active:scale-90 transition-all">N</div>
+            <div onclick="abrirAdmin()" class="w-10 h-10 bg-cyan-500 rounded-xl flex items-center justify-center font-black text-slate-950 active:scale-90 transition-all">N</div>
             <div>
-                <h1 class="text-[11px] font-black uppercase tracking-widest text-white">Nexus <span id="tier-label" class="text-cyan-400">Neural</span></h1>
-                <p class="text-[8px] text-emerald-500 font-bold uppercase flex items-center gap-1">
-                    <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span> Safe
-                </p>
+                <h1 class="text-[10px] font-black uppercase tracking-widest">Nexus <span class="text-cyan-400">Neural</span></h1>
+                <p class="text-[7px] text-emerald-500 font-bold uppercase tracking-tighter italic">● Terminal Root Active</p>
             </div>
         </div>
         <div class="text-right">
-            <p id="xp-display" class="text-xs font-black text-white">0 XP</p>
-            <div class="w-20 h-1 bg-white/10 rounded-full mt-1 overflow-hidden">
-                <div id="xp-bar" class="h-full bg-cyan-500" style="width: 0%"></div>
-            </div>
+            <p id="xp-display" class="text-[10px] font-black text-white">0 XP</p>
+            <div class="w-16 h-1 bg-white/10 rounded-full mt-1"><div id="xp-bar" class="h-full bg-cyan-500 transition-all duration-500"></div></div>
         </div>
     </header>
 
-    <main class="max-w-md mx-auto p-5 space-y-8">
-        
+    <main class="max-w-md mx-auto p-5">
         <div id="dash" class="tab-content active space-y-6">
             <div class="glass p-7 rounded-[2.5rem] shadow-2xl">
                 <div class="grid grid-cols-2 gap-4 mb-6">
-                    <div class="bg-slate-900/60 p-4 rounded-2xl border border-white/5">
-                        <label class="text-[9px] font-black text-slate-500 uppercase italic">Peso (kg)</label>
-                        <input type="number" id="u-weight" step="0.1" inputmode="decimal" class="bg-transparent w-full text-2xl font-black outline-none mt-1">
+                    <div class="bg-white/5 p-4 rounded-2xl">
+                        <label class="text-[8px] text-slate-500 uppercase font-black">Massa (kg)</label>
+                        <input id="u-weight" type="number" step="0.1" class="bg-transparent w-full text-xl font-black outline-none">
                     </div>
-                    <div class="bg-slate-900/60 p-4 rounded-2xl border border-white/5">
-                        <label class="text-[9px] font-black text-slate-500 uppercase italic">BF (%)</label>
-                        <input type="number" id="u-bf" inputmode="decimal" class="bg-transparent w-full text-2xl font-black outline-none mt-1">
+                    <div class="bg-white/5 p-4 rounded-2xl">
+                        <label class="text-[8px] text-slate-500 uppercase font-black">Gordura (%)</label>
+                        <input id="u-bf" type="number" class="bg-transparent w-full text-xl font-black outline-none">
                     </div>
                 </div>
-                <div class="space-y-6">
-                    <div class="flex gap-3">
-                        <button onclick="setMeta('Bulking')" id="m-Bulking" class="flex-1 py-4 rounded-2xl text-[10px] font-black uppercase transition-all">Bulking</button>
-                        <button onclick="setMeta('Cutting')" id="m-Cutting" class="flex-1 py-4 rounded-2xl text-[10px] font-black uppercase transition-all">Cutting</button>
-                    </div>
-                    <div class="grid grid-cols-3 gap-2">
-                        <button onclick="setNivel('1')" id="n-1" class="py-3 glass rounded-xl text-[8px] font-black uppercase">Leve</button>
-                        <button onclick="setNivel('2')" id="n-2" class="py-3 glass rounded-xl text-[8px] font-black uppercase">Militar</button>
-                        <button onclick="setNivel('3')" id="n-3" class="py-3 glass rounded-xl text-[8px] font-black uppercase">Elite</button>
-                    </div>
-                    <button onclick="gerarProtocolo()" class="w-full bg-cyan-600 py-6 rounded-[2rem] font-black text-xs uppercase shadow-xl shadow-cyan-900/40 active:scale-95 transition-all">Sincronizar IA</button>
+                <div class="flex gap-2 mb-6">
+                    <button onclick="setMeta('Bulking')" id="m-Bulking" class="flex-1 py-3 rounded-xl text-[9px] font-black uppercase transition-all">Bulking</button>
+                    <button onclick="setMeta('Cutting')" id="m-Cutting" class="flex-1 py-3 rounded-xl text-[9px] font-black uppercase transition-all">Cutting</button>
                 </div>
+                <button onclick="gerarProtocolo()" class="w-full bg-cyan-600 py-5 rounded-2xl font-black text-[10px] uppercase shadow-lg active:scale-95 transition-all">Gerar Periodização IA</button>
             </div>
-            <div id="leaderboard" class="space-y-3"></div>
+            <div id="leaderboard" class="space-y-2"></div>
         </div>
 
         <div id="treinos" class="tab-content space-y-4">
-            <div id="lista-exercicios" class="space-y-4 pb-12"></div>
+            <div id="lista-exercicios" class="space-y-3 pb-12"></div>
         </div>
 
         <div id="pro-features" class="tab-content">
-            <div id="lock-pro" class="glass p-12 rounded-[3rem] text-center">
-                <div class="text-5xl mb-6">🧠</div>
-                <h2 class="text-xl font-black uppercase text-orange-500 mb-4">Neural Advisor</h2>
-                <button onclick="abrirModal()" class="bg-gradient-to-r from-amber-500 to-orange-600 px-10 py-5 rounded-2xl font-black text-[10px] uppercase shadow-2xl">Ativar Pro</button>
-            </div>
-            <div id="content-pro" class="hidden space-y-6">
+             <div id="content-pro" class="space-y-4">
                 <div class="flex gap-2">
                     <button onclick="toggleIA('dieta')" id="btn-ia-dieta" class="flex-1 py-4 bg-orange-500 rounded-2xl text-[9px] font-black uppercase text-slate-950">Planilha Dieta</button>
-                    <button onclick="toggleIA('treino')" id="btn-ia-treino" class="flex-1 py-4 glass rounded-2xl text-[9px] font-black uppercase">Planilha Treino</button>
+                    <button onclick="toggleIA('treino')" id="btn-ia-treino" class="flex-1 py-4 glass rounded-2xl text-[9px] font-black uppercase">Periodização</button>
                 </div>
-                <div id="ia-output" class="glass p-7 rounded-[2.5rem] min-h-[300px] border-t-2 border-orange-500/30"></div>
+                <div id="ia-output" class="glass p-7 rounded-[2.5rem] min-h-[300px] border-t-2 border-orange-500/30 text-[10px] leading-relaxed"></div>
             </div>
         </div>
 
         <div id="hub" class="tab-content">
-            <div class="glass p-6 rounded-[2.5rem]">
-                <textarea id="msg-input" placeholder="O que conquistou?" class="w-full bg-slate-900/30 p-5 rounded-3xl text-sm outline-none mb-4 h-28 border border-white/5 resize-none"></textarea>
-                <button onclick="postar()" class="w-full bg-purple-600 py-4 rounded-2xl font-black text-[10px] uppercase">Publicar</button>
-                <div id="feed" class="mt-8 space-y-4 pb-12"></div>
+            <div class="glass p-6 rounded-[2.5rem] space-y-4">
+                <textarea id="msg-input" placeholder="Relate o treino de hoje..." class="w-full bg-white/5 p-5 rounded-3xl text-xs outline-none h-24 border border-white/5 resize-none"></textarea>
+                <button onclick="postar()" class="w-full bg-purple-600 py-4 rounded-2xl font-black text-[9px] uppercase">Enviar para o Feed</button>
+                <div id="feed" class="space-y-3 mt-6"></div>
             </div>
         </div>
     </main>
 
-    <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] h-20 glass rounded-[2.5rem] z-50 flex items-center justify-around px-2 shadow-2xl">
-        <button onclick="nav(event, 'dash')" class="nav-item nav-active flex flex-col items-center gap-1.5 transition-all"><span class="text-2xl">👤</span><span class="text-[8px] font-black uppercase">Perfil</span></button>
-        <button onclick="nav(event, 'treinos')" class="nav-item text-slate-500 flex flex-col items-center gap-1.5 transition-all"><span class="text-2xl">💪</span><span class="text-[8px] font-black uppercase">Treino</span></button>
-        <button onclick="nav(event, 'pro-features')" class="nav-item text-orange-500/50 flex flex-col items-center gap-1.5 transition-all"><span class="text-2xl">🧠</span><span class="text-[8px] font-black uppercase">Neural</span></button>
-        <button onclick="nav(event, 'hub')" class="nav-item text-purple-500/50 flex flex-col items-center gap-1.5 transition-all"><span class="text-2xl">🌍</span><span class="text-[8px] font-black uppercase">Hub</span></button>
+    <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] h-18 glass rounded-3xl z-50 flex items-center justify-around shadow-2xl">
+        <button onclick="nav(event, 'dash')" class="nav-active flex flex-col items-center gap-1.5"><span class="text-xl">👤</span><span class="text-[7px] font-black uppercase">Bio</span></button>
+        <button onclick="nav(event, 'treinos')" class="text-slate-500 flex flex-col items-center gap-1.5"><span class="text-xl">💪</span><span class="text-[7px] font-black uppercase">Ação</span></button>
+        <button onclick="nav(event, 'pro-features')" class="text-orange-500/40 flex flex-col items-center gap-1.5"><span class="text-xl">🧠</span><span class="text-[7px] font-black uppercase">Neural</span></button>
+        <button onclick="nav(event, 'hub')" class="text-purple-500/40 flex flex-col items-center gap-1.5"><span class="text-xl">🌍</span><span class="text-[7px] font-black uppercase">Hub</span></button>
     </nav>
 
-    <div id="modal-pay" class="fixed inset-0 bg-black/98 z-[100] hidden items-center justify-center p-6 backdrop-blur-xl">
-        <div class="bg-slate-900 p-8 rounded-[3.5rem] w-full max-w-sm text-center border border-white/10">
-            <h2 class="text-3xl font-black mb-10 text-white uppercase">NEXUS PRO</h2>
-            <div id="qr-area" class="bg-white p-5 rounded-3xl mb-8 hidden w-52 mx-auto"><img id="qr-code" class="w-full"></div>
-            <button onclick="gerarPix()" class="w-full bg-gradient-to-r from-amber-400 to-orange-600 py-6 rounded-3xl font-black text-[11px] uppercase shadow-2xl">Gerar Pix</button>
-            <button onclick="fecharModal()" class="mt-8 text-[10px] text-slate-600 font-black uppercase">Voltar</button>
-        </div>
-    </div>
-
-    <div id="admin-panel" class="fixed inset-0 bg-slate-950 z-[1000] hidden p-10 flex flex-col justify-center gap-4">
-        <button onclick="ativarPro()" class="w-full py-6 bg-orange-600 rounded-3xl font-black uppercase text-xs">Ativar Pro</button>
-        <button onclick="resetApp()" class="w-full py-6 bg-red-900/20 text-red-500 rounded-3xl font-black uppercase text-xs">Reset</button>
-        <button onclick="document.getElementById('admin-panel').classList.add('hidden')" class="text-slate-600 uppercase text-[10px] font-black mt-10 text-center italic">Sair do Root</button>
+    <div id="admin-panel" class="fixed inset-0 bg-slate-950 z-[1000] hidden p-12 flex flex-col justify-center gap-4">
+        <h3 class="text-center font-black text-cyan-500 mb-8 uppercase tracking-[0.3em]">Root Panel</h3>
+        <button onclick="localStorage.clear(); location.reload();" class="w-full py-6 bg-red-900/20 text-red-500 border border-red-900 rounded-3xl font-black uppercase text-xs">Wipe App Data</button>
+        <button onclick="db.xp += 50000; save(); atualizarUI();" class="w-full py-6 bg-cyan-900/20 text-cyan-500 border border-cyan-900 rounded-3xl font-black uppercase text-xs">Inject 50k XP</button>
+        <button onclick="document.getElementById('admin-panel').classList.add('hidden')" class="mt-8 text-slate-700 uppercase text-[9px] font-black text-center">Close Terminal</button>
     </div>
 
     <script>
-        const CONFIG = { PIX: "Nandogabriel.1710@gmail.com", WHATS: "5511994025686", NOME: "Fernando Gabriel" };
+        const CHAVE_CORRETA = "Nexus2026"; 
         let db;
 
-        // INICIALIZAÇÃO IMEDIATA (HyperDrive)
         function init() {
-            const data = localStorage.getItem('Nexus_v21_Neural');
-            db = data ? JSON.parse(data) : { xp: 0, isPro: false, meta: 'Bulking', weight: '', bf: '', nivel: '2' };
+            const data = localStorage.getItem('Nexus_v21_4');
+            db = data ? JSON.parse(data) : { xp: 0, unlocked: false, weight: '', bf: '', meta: 'Bulking' };
         }
 
-        function save() { localStorage.setItem('Nexus_v21_Neural', JSON.stringify(db)); }
+        function save() { localStorage.setItem('Nexus_v21_4', JSON.stringify(db)); }
 
         function showToast(m, c="#06b6d4") {
             const t = document.getElementById('toast');
@@ -171,112 +152,113 @@
             setTimeout(() => t.classList.remove('toast-active'), 2500);
         }
 
-        // BOOT ULTRA-FAST (150ms)
-        (function boot() {
+        window.addEventListener('load', () => {
             init();
-            window.addEventListener('load', () => {
-                document.getElementById('u-weight').value = db.weight;
-                document.getElementById('u-bf').value = db.bf;
-                atualizarUI();
-                setTimeout(() => {
-                    document.getElementById('splash-screen').classList.add('hide-splash');
-                }, 150); 
-            });
-        })();
+            if(!db.unlocked) {
+                document.getElementById('alpha-lock').classList.remove('hidden');
+                document.getElementById('splash-screen').classList.add('hide-splash');
+            } else {
+                startApp();
+            }
+        });
+
+        function verificarChave() {
+            const val = document.getElementById('alpha-key').value;
+            if(val === CHAVE_CORRETA) {
+                db.unlocked = true; save();
+                showToast("Acesso Sovereign Liberado!");
+                setTimeout(() => location.reload(), 800);
+            } else {
+                showToast("Chave Inválida", "#ef4444");
+            }
+        }
+
+        function startApp() {
+            document.getElementById('u-weight').value = db.weight;
+            document.getElementById('u-bf').value = db.bf;
+            atualizarUI();
+            setTimeout(() => {
+                document.getElementById('splash-screen').classList.add('hide-splash');
+            }, 150); // HyperDrive 150ms
+        }
 
         function atualizarUI() {
             document.getElementById('xp-display').innerText = `${db.xp.toLocaleString()} XP`;
-            document.getElementById('xp-bar').style.width = Math.min((db.xp % 5000) / 50, 100) + "%";
-            document.getElementById('tier-label').innerText = db.isPro ? "NEURAL PRO" : "NEURAL APEX";
-
+            document.getElementById('xp-bar').style.width = Math.min((db.xp % 10000) / 100, 100) + "%";
+            
             ['Bulking', 'Cutting'].forEach(m => {
-                document.getElementById('m-'+m).className = db.meta === m ? "flex-1 py-4 bg-cyan-600 rounded-2xl text-[10px] font-black uppercase text-slate-950 shadow-lg" : "flex-1 py-4 glass rounded-2xl text-[10px] font-black uppercase text-slate-500";
+                const btn = document.getElementById('m-'+m);
+                if(btn) btn.className = db.meta === m ? "flex-1 py-3 bg-cyan-600 rounded-xl text-[9px] font-black uppercase text-slate-950" : "flex-1 py-3 glass rounded-xl text-[9px] font-black uppercase text-slate-500";
             });
-
-            ['1', '2', '3'].forEach(n => {
-                document.getElementById('n-'+n).className = db.nivel === n ? "py-3 bg-white rounded-xl text-[8px] font-black uppercase text-slate-950" : "py-3 glass rounded-xl text-[8px] font-black uppercase text-slate-500";
-            });
-
-            if(db.isPro) {
-                document.getElementById('lock-pro').classList.add('hidden');
-                document.getElementById('content-pro').classList.remove('hidden');
-                toggleIA('dieta');
-            }
             renderRank();
+            toggleIA('dieta');
         }
 
         function toggleIA(tipo) {
             const out = document.getElementById('ia-output');
             const p = parseFloat(db.weight) || 70;
-            
-            document.getElementById('btn-ia-dieta').className = tipo === 'dieta' ? "flex-1 py-4 bg-orange-500 rounded-2xl text-[9px] font-black uppercase text-slate-950" : "flex-1 py-4 glass rounded-2xl text-[9px] font-black uppercase text-slate-500";
-            document.getElementById('btn-ia-treino').className = tipo === 'treino' ? "flex-1 py-4 bg-orange-500 rounded-2xl text-[9px] font-black uppercase text-slate-950" : "flex-1 py-4 glass rounded-2xl text-[9px] font-black uppercase text-slate-500";
-
             if(tipo === 'dieta') {
-                const kcal = db.meta === 'Bulking' ? Math.round(p * 37) : Math.round(p * 25);
-                out.innerHTML = `<h3 class='text-orange-500 font-black text-xs mb-4 uppercase'>Planilha Dieta IA</h3><p class='mb-4'>Meta: ${kcal} kcal/dia</p><div class='space-y-3 text-[10px] opacity-80'><div class='bg-white/5 p-3 rounded-lg'><b>Refeição 1:</b> 4 Ovos + Aveia</div><div class='bg-white/5 p-3 rounded-lg'><b>Refeição 2:</b> 200g Frango + Arroz</div><div class='bg-white/5 p-3 rounded-lg'><b>Refeição 3:</b> Whey + 1 Fruta</div></div>`;
+                const kcal = db.meta === 'Bulking' ? Math.round(p * 38) : Math.round(p * 26);
+                out.innerHTML = `<h3 class='text-orange-500 font-black mb-4 uppercase tracking-tighter'>Planilha Neural v21.4</h3>
+                <div class='space-y-4'>
+                    <div class='bg-white/5 p-4 rounded-2xl'><p class='text-white font-bold'>Déficit/Superávit:</p><p class='text-lg font-black'>${kcal} kcal/dia</p></div>
+                    <div class='bg-white/5 p-4 rounded-2xl'><p class='text-white font-bold'>Base Proteica:</p><p class='text-lg font-black'>${Math.round(p*2.2)}g Proteína</p></div>
+                    <p class='italic opacity-60'>*Sugestão Fundador: 5 Refeições sólidas, foco em densidade calórica.</p>
+                </div>`;
             } else {
-                out.innerHTML = `<h3 class='text-orange-500 font-black text-xs mb-4 uppercase'>Periodização IA</h3><div class='space-y-3'><div class='bg-white/5 p-4 rounded-xl border-l-2 border-orange-500'><p class='font-black text-[9px] text-orange-400'>PUSH/PULL/LEGS</p><p class='text-[9px] mt-1 italic'>Séries: 4x10 a 12 reps</p></div><div class='bg-white/5 p-4 rounded-xl border-l-2 border-orange-500'><p class='font-black text-[9px] text-orange-400'>CARDIO</p><p class='text-[9px] mt-1 italic'>30 min após o treino</p></div></div>`;
+                out.innerHTML = `<h3 class='text-orange-500 font-black mb-4 uppercase tracking-tighter'>Periodização Alpha</h3>
+                <div class='space-y-3 opacity-80'>
+                    <p><b>SEG:</b> Empurrar (Foco Peitoral Superior)</p>
+                    <p><b>TER:</b> Puxar (Foco Largura de Costas)</p>
+                    <p><b>QUA:</b> Pernas (Foco Quadríceps)</p>
+                    <p><b>QUI:</b> Superiores Completo (Pump)</p>
+                    <p><b>SEX:</b> Perna + Abdómen</p>
+                </div>`;
             }
         }
 
         function gerarProtocolo() {
-            showToast("Sincronizando Neural...");
+            showToast("Sincronizando Dados...");
             const list = document.getElementById('lista-exercicios');
-            const n = parseInt(db.nivel);
-            const treinos = db.meta === 'Bulking' ? [{n:'Supino', s:'4x10', x:120*n}, {n:'Agachamento', s:'4x10', x:150*n}] : [{n:'Burpees', s:'15 Reps', x:180*n}, {n:'Flexão', s:'Falha', x:140*n}];
-            
-            setTimeout(() => {
-                list.innerHTML = `<h3 class='text-[10px] font-black text-cyan-500 uppercase italic mb-4'>Protocolo do Dia</h3>`;
-                treinos.forEach(ex => {
-                    list.innerHTML += `<div class='glass p-6 rounded-[2rem] border-l-4 border-cyan-500 flex justify-between items-center mb-4'><div><p class='font-black uppercase text-xs'>${ex.n}</p><p class='text-[9px] text-slate-500 font-bold'>${ex.s}</p></div><button onclick="addXP(this, ${ex.x})" class='w-12 h-12 bg-cyan-500/10 rounded-2xl text-xl'>⚡</button></div>`;
-                });
-                nav(null, 'treinos');
-                showToast("Protocolo Pronto!", "#10b981");
-            }, 400);
+            const treinos = db.meta === 'Bulking' ? [{n:'Supino Inclinado', s:'4x8-10'}, {n:'Agachamento Livre', s:'4x8-12'}] : [{n:'Burpees', s:'20 Reps'}, {n:'Flexão de Braço', s:'Falha'}];
+            list.innerHTML = `<h3 class='text-[9px] font-black text-cyan-500 uppercase mb-4'>Protocolo Diário Ativo</h3>`;
+            treinos.forEach(ex => {
+                list.innerHTML += `<div class='glass p-6 rounded-[2rem] flex justify-between items-center mb-3'><div><p class='font-black uppercase text-xs'>${ex.n}</p><p class='text-[8px] text-slate-500'>${ex.s}</p></div><button onclick="addXP(this, 250)" class='w-12 h-12 bg-cyan-500/10 rounded-2xl text-xl transition-all'>⚡</button></div>`;
+            });
+            nav(null, 'treinos');
         }
 
-        function addXP(btn, v) { db.xp += v; save(); atualizarUI(); btn.innerHTML = '🏆'; btn.disabled = true; showToast(`+${v} XP`, "#10b981"); }
-        function setMeta(m) { db.meta = m; save(); atualizarUI(); showToast(`Foco: ${m}`); }
-        function setNivel(n) { db.nivel = n; save(); atualizarUI(); showToast(`Intensidade: ${n}`); }
-
-        function renderRank() {
-            const r = [{n:'Sovereign Neural', x:500000, s:'👑'}, {n:'Você', x:db.xp, s:'⚡'}].sort((a,b)=>b.x-a.x);
-            document.getElementById('leaderboard').innerHTML = `<p class='text-[9px] font-black uppercase text-slate-700 mb-3 ml-2'>Ranking Global</p>` + r.map((u,i)=>`<div class='bg-slate-900/40 p-5 rounded-2xl flex justify-between border border-white/5 mb-2'><span class='text-[10px] font-black text-white'>${u.s} ${u.n}</span><span class='text-[10px] font-black text-cyan-400'>${u.x.toLocaleString()} XP</span></div>`).join('');
-        }
-
-        function postar() {
-            const i = document.getElementById('msg-input');
-            if(!i.value.trim()) return;
-            document.getElementById('feed').innerHTML = `<div class='glass p-6 rounded-[2rem] border-l-2 border-purple-500/40 mb-4'><p class='text-sm italic text-slate-300'>${i.value}</p></div>` + document.getElementById('feed').innerHTML;
-            i.value = ''; showToast("Publicado!");
+        function addXP(btn, v) { 
+            db.xp += v; save(); atualizarUI(); 
+            btn.innerHTML = '🏆'; btn.disabled = true; 
+            showToast(`+${v} XP Conquistado!`, "#10b981");
         }
 
         function nav(e, tab) {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('nav-active'));
             document.getElementById(tab).classList.add('active');
-            if(e) e.currentTarget.classList.add('nav-active');
             window.scrollTo(0,0);
         }
 
-        function gerarPix() {
-            const pix = `00020126360014br.gov.bcb.pix01${CONFIG.PIX.length}${CONFIG.PIX}520400005303986540519.905802BR59${CONFIG.NOME.length}${CONFIG.NOME}6009SAO PAULO62070503***6304`;
-            document.getElementById('qr-code').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(pix)}`;
-            document.getElementById('qr-area').classList.remove('hidden');
-            navigator.clipboard.writeText(pix);
-            showToast("Pix Copiado!");
-            setTimeout(() => window.open(`https://wa.me/${CONFIG.WHATS}?text=Pagamento feito!`, '_blank'), 1500);
+        function setMeta(m) { db.meta = m; save(); atualizarUI(); showToast(`Foco: ${m}`); }
+        
+        function postar() {
+            const i = document.getElementById('msg-input');
+            if(!i.value.trim()) return;
+            document.getElementById('feed').innerHTML = `<div class='glass p-5 rounded-[1.5rem] text-[10px] italic border-l-2 border-purple-500 mb-3 animate-pulse'>${i.value}</div>` + document.getElementById('feed').innerHTML;
+            i.value = ''; showToast("Feed Atualizado!");
         }
 
-        function abrirModal() { document.getElementById('modal-pay').classList.replace('hidden', 'flex'); }
-        function fecharModal() { document.getElementById('modal-pay').classList.replace('flex', 'hidden'); }
-        function abrirAdmin() { if(prompt("Senha:") === "1710") document.getElementById('admin-panel').classList.remove('hidden'); }
-        function ativarPro() { db.isPro = true; save(); location.reload(); }
-        function resetApp() { localStorage.clear(); location.reload(); }
+        function renderRank() {
+            const r = [{n:'Sovereign', x:500000}, {n:'Você', x:db.xp}].sort((a,b)=>b.x-a.x);
+            document.getElementById('leaderboard').innerHTML = r.map((u,i)=>`<div class='bg-white/5 p-4 rounded-xl flex justify-between text-[9px] font-black uppercase'><span>#${i+1} ${u.n}</span><span class='text-cyan-400'>${u.x.toLocaleString()} XP</span></div>`).join('');
+        }
 
-        document.getElementById('u-weight').onchange = (e) => { db.weight = e.target.value; save(); atualizarUI(); };
+        function abrirAdmin() { if(prompt("Nexus Root Password:") === "1710") document.getElementById('admin-panel').classList.remove('hidden'); }
+        
+        document.getElementById('u-weight').onchange = (e) => { db.weight = e.target.value; save(); };
         document.getElementById('u-bf').onchange = (e) => { db.bf = e.target.value; save(); };
     </script>
 </body>
-</html>
+                    </html>
+    
