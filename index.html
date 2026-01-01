@@ -12,6 +12,8 @@
         .active-tab { border-bottom: 4px solid #06b6d4; color: #06b6d4; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
+        @keyframes pulse-cyan { 0%, 100% { box-shadow: 0 0 5px #06b6d4; } 50% { box-shadow: 0 0 20px #06b6d4; } }
+        .vagner-mode { animation: pulse-cyan 2s infinite; border-color: #06b6d4 !important; color: #06b6d4 !important; background: rgba(6, 182, 212, 0.1); }
     </style>
 </head>
 <body class="nexus-dark text-slate-100 font-sans pb-28">
@@ -22,168 +24,175 @@
             <div>
                 <h1 class="text-xs font-black uppercase tracking-widest">Nexus <span id="user-tier" class="text-cyan-500 italic">Basic</span></h1>
                 <button id="admin-btn" onclick="abrirAdmin()" class="hidden text-[8px] bg-red-600 px-2 py-0.5 rounded-full font-black text-white mt-1 uppercase">Painel Admin</button>
+                <p id="xp-display" class="text-[9px] text-slate-500 font-bold uppercase">XP: 0</p>
             </div>
         </div>
-        <button id="btn-upgrade" onclick="abrirModal()" class="premium-gradient text-[9px] font-black px-4 py-2 rounded-full text-white shadow-lg">UPGRADE PRO</button>
+        <button id="btn-upgrade" onclick="abrirModal()" class="premium-gradient text-[9px] font-black px-4 py-2 rounded-full text-white">UPGRADE PRO</button>
     </header>
 
     <nav class="flex justify-around bg-slate-900/50 border-b border-white/5 sticky top-[73px] z-40 backdrop-blur-md">
         <button onclick="openTab(event, 'dash')" class="tab-link p-4 font-bold text-[10px] uppercase active-tab">Início</button>
         <button onclick="openTab(event, 'treinos')" class="tab-link p-4 font-bold text-[10px] uppercase">Agenda AI</button>
-        <button onclick="openTab(event, 'pro-features')" class="tab-link p-4 font-bold text-[10px] uppercase text-orange-400">Nutrição 💎</button>
+        <button onclick="openTab(event, 'pro-features')" class="tab-link p-4 font-bold text-[10px] uppercase text-orange-400 font-black">Nutrição 💎</button>
     </nav>
 
     <main class="max-w-md mx-auto p-4 space-y-6">
         <div id="dash" class="tab-content active space-y-6">
             <section class="glass p-6 rounded-[2.5rem] border-t-2 border-cyan-500">
-                <div class="flex items-start gap-4 mb-6">
-                    <img src="https://image.pollinations.ai/prompt/nexus%20ai%20avatar%20cyan%20robot?width=100&height=100" class="w-14 h-14 rounded-2xl border border-cyan-500/30">
-                    <div>
-                        <h3 class="text-[10px] font-black uppercase text-cyan-400">Nexus Core</h3>
-                        <p id="ai-msg" class="text-[11px] text-slate-400 mt-1 italic">"Defina seu nível de carga e gere sua agenda de hoje."</p>
-                    </div>
-                </div>
-                
-                <div class="grid grid-cols-3 gap-2 mb-6">
+                <div class="grid grid-cols-2 gap-2 mb-2">
                     <button onclick="setLevel('Iniciante')" id="l-Iniciante" class="bg-slate-800 p-3 rounded-xl text-[9px] font-black uppercase">Iniciante</button>
                     <button onclick="setLevel('Intermediário')" id="l-Intermediário" class="bg-slate-800 p-3 rounded-xl text-[9px] font-black uppercase">Pro</button>
-                    <button onclick="checkElite()" id="l-Elite" class="bg-slate-800 p-3 rounded-xl text-[9px] font-black uppercase border border-white/5 text-orange-400 italic">Elite 🔒</button>
                 </div>
-
-                <button onclick="gerarAgenda()" class="w-full bg-cyan-600 py-4 rounded-2xl font-black text-xs uppercase shadow-xl hover:bg-cyan-500 transition-all">Sincronizar Protocolo</button>
+                <div class="grid grid-cols-2 gap-2 mb-6">
+                    <button onclick="checkElite()" id="l-Elite" class="bg-slate-800 p-3 rounded-xl text-[9px] font-black uppercase text-orange-400 italic">Elite 🔒</button>
+                    <button onclick="ativarProtocoloVagner()" id="l-vagner" class="bg-slate-900 border border-white/5 p-3 rounded-xl text-[9px] font-black uppercase text-slate-600">Protocolo Vagner 🎓</button>
+                </div>
+                <button onclick="gerarAgenda()" class="w-full bg-cyan-600 py-4 rounded-2xl font-black text-xs uppercase shadow-xl">Sincronizar Protocolo</button>
             </section>
         </div>
 
         <div id="treinos" class="tab-content space-y-4">
-            <h2 class="text-sm font-black uppercase tracking-widest text-cyan-500">Treinos do Dia</h2>
-            <div id="agenda-area" class="space-y-4">
-                <p class="text-xs text-slate-500 text-center py-10 italic">Aguardando comando...</p>
+            <div id="agenda-lista" class="space-y-4">
+                <p class="text-center py-20 text-slate-600 text-[10px] uppercase font-black italic">Aguardando Sincronização...</p>
             </div>
         </div>
 
         <div id="pro-features" class="tab-content">
-            <section class="glass p-10 rounded-[3rem] text-center border-2 border-orange-500/20">
-                <span class="text-4xl">💎</span>
-                <h2 class="text-xl font-black mt-4 uppercase text-orange-400 italic">Recurso Premium</h2>
-                <button onclick="abrirModal()" class="premium-gradient mt-4 px-8 py-4 rounded-2xl font-black text-xs uppercase">Comprar Pro</button>
-            </section>
+            <div id="nutri-lock" class="glass p-10 rounded-[3rem] text-center border-2 border-orange-500/20">
+                <span class="text-4xl">🥗</span>
+                <h2 class="text-xl font-black mt-4 uppercase text-orange-500 italic">Bio-Nutrição IA</h2>
+                <button onclick="abrirModal()" class="premium-gradient mt-6 px-8 py-4 rounded-2xl font-black text-xs uppercase">Liberar Pro</button>
+            </div>
+            <div id="nutri-content" class="hidden space-y-4">
+                <h3 class="text-sm font-black uppercase text-orange-500 mb-4">Plano Alimentar Elite</h3>
+                <div class="glass p-5 rounded-3xl border-l-4 border-orange-500">
+                    <p class="text-[10px] font-bold text-white uppercase">Proteína de Alta Performance</p>
+                    <p class="text-[11px] text-slate-400 italic">180g Frango ou Tilápia + 150g Batata Doce.</p>
+                </div>
+            </div>
         </div>
     </main>
 
     <div id="admin-panel" class="fixed inset-0 bg-slate-950 z-[200] hidden p-8 overflow-y-auto">
-        <h2 class="text-2xl font-black text-red-500 uppercase italic mb-6">Master Control</h2>
-        <div id="stats-area" class="grid grid-cols-2 gap-4 mb-8">
-            </div>
-        <div class="space-y-4">
-            <button onclick="ativarProGratis()" class="w-full py-4 bg-orange-600 rounded-xl font-black text-[10px] uppercase">Ativar PRO Permanente</button>
-            <button onclick="resetApp()" class="w-full py-4 bg-slate-800 rounded-xl font-black text-[10px] uppercase border border-red-500/30 text-red-500">Resetar App (Fábrica)</button>
-            <button onclick="fecharAdmin()" class="w-full py-4 bg-slate-900 rounded-xl font-black text-[10px] uppercase border border-white/10">Sair do Painel</button>
-        </div>
+        <h2 class="text-xl font-black text-red-500 mb-6 uppercase italic">Nexus Master Control</h2>
+        <button onclick="ativarProGratis()" class="w-full py-4 bg-orange-600 rounded-xl font-black text-[10px] uppercase mb-2">Ativar Pro Permanente</button>
+        <button onclick="localStorage.clear(); location.reload();" class="w-full py-4 bg-slate-800 rounded-xl font-black text-[10px] uppercase">Zerar Tudo</button>
+        <button onclick="fecharAdmin()" class="w-full py-4 mt-4 text-slate-500 font-bold uppercase text-[10px]">Fechar</button>
     </div>
 
     <div id="modal-payment" class="fixed inset-0 bg-black/95 z-[100] hidden items-center justify-center p-4">
-        <div class="bg-slate-900 p-8 rounded-[3rem] w-full max-w-sm border border-white/10 shadow-2xl">
-            <div id="step-offer" class="space-y-6 text-center">
-                <h2 class="text-2xl font-black text-white uppercase italic">Nexus Pro</h2>
-                <p class="text-3xl font-black text-white">R$ 19,90</p>
-                <button onclick="irParaPagamento()" class="w-full premium-gradient py-5 rounded-2xl font-black text-xs uppercase shadow-xl">Gerar Pix</button>
-                <button onclick="fecharModal()" class="w-full text-[10px] text-slate-600 font-bold uppercase">Agora não</button>
+        <div class="bg-slate-900 p-8 rounded-[3rem] w-full max-w-sm text-center">
+            <h2 class="text-2xl font-black uppercase italic">Nexus Pro</h2>
+            <p class="text-3xl font-black text-white my-4">R$ 19,90</p>
+            <button onclick="irParaPagamento()" class="w-full premium-gradient py-5 rounded-2xl font-black text-xs uppercase">Gerar Pix</button>
+            <div id="step-checkout" class="hidden mt-6 space-y-4">
+                <img id="qr-image" class="w-40 mx-auto bg-white p-2 rounded-xl">
+                <button onclick="enviarComprovante()" class="w-full bg-green-600 py-4 rounded-2xl text-[10px] font-black uppercase">Enviar Comprovante</button>
             </div>
-            <div id="step-checkout" class="hidden space-y-6 text-center">
-                <div class="flex justify-center bg-white p-3 rounded-3xl"><img id="qr-image" src="" class="w-40 h-40"></div>
-                <div class="bg-slate-950 p-4 rounded-2xl border border-cyan-500/30 text-[8px] text-cyan-500 break-all font-mono" id="pix-string"></div>
-                <button onclick="copiarPix()" id="btn-copy" class="w-full bg-slate-800 text-white py-4 rounded-xl font-black text-[10px] uppercase">Copiar Código</button>
-                <button onclick="enviarComprovante()" class="w-full bg-green-600 text-white py-4 rounded-2xl font-black text-xs uppercase">Enviar Comprovante (WhatsApp)</button>
-            </div>
+            <button onclick="fecharModal()" class="mt-4 text-[10px] text-slate-500 uppercase">Fechar</button>
         </div>
     </div>
 
     <script>
-        const SENHA_MESTRA = "1234"; 
+        const SENHA_MESTRA = "1234";
         const CHAVE_PIX = "Nandogabriel.1710@gmail.com";
         const WHATSAPP = "5511994025686";
         const NOME = "Fernando Gabriel";
 
-        let db = JSON.parse(localStorage.getItem('Nexus_DB_9')) || { xp: 0, isPro: false, level: 'Iniciante', isAdmin: false };
-        let stats = JSON.parse(localStorage.getItem('Nexus_Stats')) || { pixGerados: 0, clicksWhats: 0 };
+        let db = JSON.parse(localStorage.getItem('Nexus_Final_96')) || { xp: 0, isPro: false, level: 'Iniciante', isAdmin: false, isVagner: false };
 
-        // --- SISTEMA ADMIN ---
-        let logoClicks = 0;
-        function tentarLoginAdmin() {
-            logoClicks++;
-            if(logoClicks >= 5) {
-                let p = prompt("SENHA MASTER:");
-                if(p === SENHA_MESTRA) {
-                    db.isAdmin = true;
-                    salvar();
-                    atualizarUI();
-                    alert("Acesso Master Ativado!");
-                }
-                logoClicks = 0;
-            }
-        }
+        function salvar() { localStorage.setItem('Nexus_Final_96', JSON.stringify(db)); }
 
-        function abrirAdmin() {
-            document.getElementById('admin-panel').style.display = 'block';
-            document.getElementById('stats-area').innerHTML = `
-                <div class="bg-slate-900 p-4 rounded-2xl border border-white/5"><p class="text-[8px] text-slate-500 uppercase">Pix Gerados</p><p class="text-xl font-black text-cyan-400">${stats.pixGerados}</p></div>
-                <div class="bg-slate-900 p-4 rounded-2xl border border-white/5"><p class="text-[8px] text-slate-500 uppercase">Cliques Whats</p><p class="text-xl font-black text-green-400">${stats.clicksWhats}</p></div>
-            `;
-        }
-        function fecharAdmin() { document.getElementById('admin-panel').style.display = 'none'; }
-        function ativarProGratis() { db.isPro = true; salvar(); atualizarUI(); alert("Status PRO ativado!"); }
-        function resetApp() { if(confirm("Zerar tudo?")) { localStorage.clear(); window.location.reload(); } }
-
-        // --- CORE ---
         function openTab(evt, tabName) {
             document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
             document.querySelectorAll(".tab-link").forEach(l => l.classList.remove("active-tab"));
             document.getElementById(tabName).classList.add("active");
-            evt.currentTarget.classList.add("active-tab");
+            if(evt) evt.currentTarget.classList.add("active-tab");
         }
 
         function setLevel(lvl) { db.level = lvl; salvar(); atualizarUI(); }
         function checkElite() { if(!db.isPro) abrirModal(); else setLevel('Elite'); }
 
-        function gerarAgenda() {
-            document.getElementById('agenda-area').innerHTML = `<div class="glass p-6 rounded-[2rem] border-l-4 border-cyan-500"><h3 class="font-black text-xs uppercase">${db.level} Protocol</h3><p class="text-[10px] text-slate-400 mt-2 italic">Carregado com sucesso.</p></div>`;
-            openTab({currentTarget: document.querySelector('button[onclick*="treinos"]')}, 'treinos');
+        function ativarProtocoloVagner() {
+            if(!db.isVagner && !db.isAdmin) {
+                alert("Protocolo Bloqueado: Exclusivo para o Mestre Vagner.");
+                return;
+            }
+            alert("SISTEMA: Protocolo Vagner Ativado.\n\n'O conhecimento é a base de toda força. Obrigado por tudo, Professor!'");
+            db.level = 'vagner';
+            db.isPro = true;
+            salvar();
+            atualizarUI();
+            gerarAgenda();
         }
 
         function atualizarUI() {
-            document.getElementById('user-tier').innerText = db.isPro ? "PRO 👑" : "Basic";
-            if(db.isAdmin) {
+            document.getElementById('xp-display').innerText = `XP: ${db.xp}`;
+            
+            if(db.isVagner) {
+                document.getElementById('user-tier').innerText = "VIP: VAGNER 🎓";
+                document.getElementById('l-vagner').classList.add('vagner-mode');
+                document.getElementById('l-vagner').classList.remove('text-slate-600');
+            } else if(db.isAdmin) {
+                document.getElementById('user-tier').innerText = "MASTER ADMIN";
                 document.getElementById('admin-btn').classList.remove('hidden');
-                document.getElementById('user-tier').innerText = "MASTER";
+            } else if(db.isPro) {
+                document.getElementById('user-tier').innerText = "PRO 👑";
             }
-            if(db.isPro) document.getElementById('btn-upgrade').style.display = 'none';
+
+            if(db.isPro) {
+                document.getElementById('btn-upgrade').style.display = 'none';
+                document.getElementById('nutri-lock').classList.add('hidden');
+                document.getElementById('nutri-content').classList.remove('hidden');
+                document.getElementById('l-Elite').innerHTML = "Elite";
+                document.getElementById('l-Elite').classList.remove('text-orange-400');
+            }
+
             document.querySelectorAll('[id^="l-"]').forEach(b => b.classList.remove('bg-cyan-600', 'text-slate-950'));
-            document.getElementById('l-' + db.level).classList.add('bg-cyan-600', 'text-slate-950');
+            const activeBtn = document.getElementById('l-' + db.level);
+            if(activeBtn) activeBtn.classList.add('bg-cyan-600', 'text-slate-950');
         }
 
-        // --- PAGAMENTO ---
+        function tentarLoginAdmin() {
+            let p = prompt("CÓDIGO:");
+            if(p === "VAGNER" || p === "vagner") {
+                db.isVagner = true; db.isPro = true; salvar(); atualizarUI();
+                alert("Olá, Professor Vagner! Acesso VIP liberado.");
+            } else if(p === SENHA_MESTRA) {
+                db.isAdmin = true; db.isPro = true; salvar(); atualizarUI();
+            }
+        }
+
+        function gerarAgenda() {
+            const lista = document.getElementById('agenda-lista');
+            const exercicios = db.level === 'vagner' ? 
+                [{n: 'Muscle Up do Mestre', s: '4x10'}, {n: 'Leg Press de Newton', s: '5x12'}] : 
+                [{n: 'Protocolo ' + db.level, s: '3x12'}];
+            
+            lista.innerHTML = exercicios.map(ex => `
+                <div class="glass p-5 rounded-3xl border-l-4 border-cyan-500">
+                    <p class="text-xs font-black uppercase">${ex.n}</p>
+                    <p class="text-[10px] text-slate-500 italic">${ex.s}</p>
+                </div>
+            `).join('');
+            openTab(null, 'treinos');
+        }
+
         function abrirModal() { document.getElementById('modal-payment').style.display = 'flex'; }
         function fecharModal() { document.getElementById('modal-payment').style.display = 'none'; }
-        
+        function fecharAdmin() { document.getElementById('admin-panel').style.display = 'none'; }
+        function abrirAdmin() { document.getElementById('admin-panel').style.display = 'block'; }
+        function ativarProGratis() { db.isPro = true; salvar(); atualizarUI(); alert("PRO Liberado!"); }
+
         function irParaPagamento() {
-            stats.pixGerados++;
-            localStorage.setItem('Nexus_Stats', JSON.stringify(stats));
             const pStr = `00020126360014br.gov.bcb.pix01${CHAVE_PIX.length}${CHAVE_PIX}520400005303986540519.905802BR59${NOME.length}${NOME}6009SAO PAULO62070503***6304`;
-            document.getElementById('pix-string').innerText = pStr;
             document.getElementById('qr-image').src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(pStr)}`;
-            document.getElementById('step-offer').classList.add('hidden');
             document.getElementById('step-checkout').classList.remove('hidden');
         }
+        function enviarComprovante() { window.open(`https://wa.me/${WHATSAPP}?text=Fiz o Pix!`, '_blank'); }
 
-        function copiarPix() { navigator.clipboard.writeText(document.getElementById('pix-string').innerText); alert("Copiado!"); }
-        function enviarComprovante() {
-            stats.clicksWhats++;
-            localStorage.setItem('Nexus_Stats', JSON.stringify(stats));
-            window.open(`https://wa.me/${WHATSAPP}?text=Fiz o Pix do Nexus Pro!`, '_blank');
-        }
-
-        function salvar() { localStorage.setItem('Nexus_DB_9', JSON.stringify(db)); }
         window.onload = atualizarUI;
     </script>
 </body>
-</html>
+        </html>
+        
