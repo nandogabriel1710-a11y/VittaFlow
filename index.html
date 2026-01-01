@@ -3,151 +3,244 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Nexus AI - Omni Sovereign</title>
+    <title>Nexus v14 - Sovereign</title>
     
     <style>
-        /* CSS CRÍTICO PARA NÃO TRAVAR */
-        #splash-screen {
-            position: fixed; inset: 0; background: #020617; z-index: 99999;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            transition: opacity 0.4s ease, visibility 0.4s;
-        }
-        .logo-pulse {
-            width: 80px; height: 80px; background: #06b6d4; border-radius: 22px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 40px; font-weight: 900; color: #020617; font-family: sans-serif;
-            animation: pulse-ring 2s infinite;
-        }
-        @keyframes pulse-ring { 0%, 100% { transform: scale(0.95); } 50% { transform: scale(1.05); } }
-        .hide-splash { opacity: 0 !important; visibility: hidden !important; }
+        :root { --accent: #06b6d4; --bg: #020617; }
+        body { background: var(--bg); color: white; margin: 0; font-family: system-ui, -apple-system, sans-serif; overflow-x: hidden; }
         
-        /* Pre-ajuste para evitar pulo de layout */
-        body { background-color: #020617; margin: 0; overflow-x: hidden; }
+        #splash-screen {
+            position: fixed; inset: 0; background: var(--bg); z-index: 10000;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .logo-box {
+            width: 70px; height: 70px; background: var(--accent); border-radius: 18px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 35px; font-weight: 900; color: #020617;
+            box-shadow: 0 0 30px rgba(6, 182, 212, 0.3);
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.8; } }
+        .hidden { display: none !important; }
         .tab-content { display: none; }
-        .tab-content.active { display: block; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="text-slate-100 font-sans pb-28 selection:bg-cyan-500/30">
+<body class="pb-24">
 
     <div id="splash-screen">
-        <div class="logo-pulse">N</div>
-        <p style="color: #06b6d4; margin-top: 20px; font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5em; font-family: sans-serif;">
-            Nexus Sovereign
-        </p>
+        <div class="logo-box">N</div>
+        <p style="color: var(--accent); margin-top: 20px; font-size: 10px; font-weight: 800; letter-spacing: 0.4em; text-transform: uppercase;">Nexus Sovereign</p>
     </div>
-
-    <script>
-        function killSplash() {
-            const s = document.getElementById('splash-screen');
-            if(s) s.classList.add('hide-splash');
-        }
-        // Força o fechamento em 1.5 segundos independente de qualquer erro
-        setTimeout(killSplash, 1500);
-        // Também tenta fechar quando o carregamento terminar
-        window.onload = killSplash;
-    </script>
 
     <header class="p-4 flex justify-between items-center border-b border-white/5 sticky top-0 z-50 bg-slate-950/90 backdrop-blur-xl">
         <div class="flex items-center gap-3">
-            <div onclick="tentarLoginAdmin()" class="w-10 h-10 bg-cyan-500 rounded-xl flex items-center justify-center font-black text-slate-900 cursor-pointer active:scale-90 shadow-lg">N</div>
+            <div onclick="abrirAdmin()" class="w-10 h-10 bg-cyan-500 rounded-xl flex items-center justify-center font-black text-slate-900 cursor-pointer shadow-lg shadow-cyan-500/20">N</div>
             <div>
-                <h1 class="text-[10px] font-black uppercase tracking-widest leading-none">Nexus <span id="user-tier" class="text-cyan-400 italic">Sovereign</span></h1>
+                <h1 class="text-[10px] font-black uppercase tracking-widest leading-none">Nexus <span id="user-tier" class="text-cyan-400 italic">Basic</span></h1>
                 <p id="xp-display" class="text-[9px] text-slate-500 font-bold uppercase mt-1">XP: 0</p>
             </div>
         </div>
-        <button id="btn-upgrade" onclick="abrirModal()" class="bg-gradient-to-br from-amber-400 to-orange-600 text-[10px] font-black px-5 py-2.5 rounded-full text-white shadow-xl active:scale-95">UPGRADE PRO</button>
+        <button id="btn-upgrade" onclick="abrirModal()" class="bg-gradient-to-br from-amber-400 to-orange-600 text-[10px] font-black px-5 py-2.5 rounded-full text-white shadow-xl">UPGRADE PRO</button>
     </header>
 
     <nav class="flex justify-around bg-slate-950/50 border-b border-white/5 sticky top-[72px] z-40 backdrop-blur-md">
-        <button onclick="openTab(event, 'dash')" class="tab-link p-4 font-black text-[10px] uppercase active-tab border-b-4 border-cyan-500 text-cyan-500">Dashboard</button>
-        <button onclick="openTab(event, 'treinos')" class="tab-link p-4 font-black text-[10px] uppercase">Protocolos</button>
-        <button onclick="openTab(event, 'pro-features')" class="tab-link p-4 font-black text-[10px] uppercase text-orange-500">Bio-IA 💎</button>
-        <button onclick="openTab(event, 'hub')" class="tab-link p-4 font-black text-[10px] uppercase text-purple-400">Feed</button>
+        <button onclick="openTab(event, 'dash')" class="tab-link p-4 font-black text-[10px] uppercase border-b-2 border-cyan-500 text-cyan-500">Perfil</button>
+        <button onclick="openTab(event, 'treinos')" class="tab-link p-4 font-black text-[10px] uppercase text-slate-500">Treinos</button>
+        <button onclick="openTab(event, 'pro-features')" class="tab-link p-4 font-black text-[10px] uppercase text-orange-500/50">Bio-IA</button>
+        <button onclick="openTab(event, 'hub')" class="tab-link p-4 font-black text-[10px] uppercase text-purple-400/50">Feed</button>
     </nav>
 
-    <main class="max-w-md mx-auto p-4 space-y-6">
-        
+    <main id="app-main" class="max-w-md mx-auto p-4 space-y-6">
         <div id="dash" class="tab-content active space-y-6">
-            <section class="bg-white/5 p-7 rounded-[2.5rem] border-t-2 border-cyan-500/50 shadow-2xl backdrop-blur-md">
-                <div class="grid grid-cols-2 gap-4 mb-8">
-                    <div class="bg-slate-900/50 p-4 rounded-2xl border border-white/5">
-                        <p class="text-[8px] uppercase text-slate-500 mb-1 font-black italic">Peso (kg)</p>
-                        <input type="number" id="user-weight" inputmode="decimal" placeholder="00" class="bg-transparent w-full text-2xl font-black outline-none text-white" oninput="db.peso=this.value; salvar(); atualizarUI();">
+            <section class="bg-slate-900/40 p-7 rounded-[2.5rem] border border-white/5">
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="bg-slate-950 p-4 rounded-2xl border border-white/10">
+                        <p class="text-[8px] uppercase text-slate-500 mb-1 font-black">Peso (kg)</p>
+                        <input type="number" id="user-weight" inputmode="decimal" placeholder="0.0" class="bg-transparent w-full text-2xl font-black outline-none text-white">
                     </div>
-                    <div class="bg-slate-900/50 p-4 rounded-2xl border border-white/5">
-                        <p class="text-[8px] uppercase text-slate-500 mb-1 font-black italic">BF (%)</p>
-                        <input type="number" id="user-bf" inputmode="decimal" placeholder="15" class="bg-transparent w-full text-2xl font-black outline-none text-white" oninput="db.bf=this.value; salvar();">
+                    <div class="bg-slate-950 p-4 rounded-2xl border border-white/10">
+                        <p class="text-[8px] uppercase text-slate-500 mb-1 font-black">BF %</p>
+                        <input type="number" id="user-bf" inputmode="decimal" placeholder="0" class="bg-transparent w-full text-2xl font-black outline-none text-white">
                     </div>
                 </div>
-                
-                <div class="grid grid-cols-2 gap-3 mb-8">
-                    <button onclick="setMeta('Ganhar Massa')" id="m-Ganhar" class="p-4 rounded-2xl text-[10px] font-black uppercase border border-white/5 transition-all">Ganhar Massa</button>
-                    <button onclick="setMeta('Perder Peso')" id="m-Perder" class="p-4 rounded-2xl text-[10px] font-black uppercase border border-white/5 transition-all">Perder Peso</button>
+                <div class="grid grid-cols-2 gap-3 mb-6">
+                    <button onclick="setMeta('Ganhar Massa')" id="m-Ganhar" class="p-4 rounded-2xl text-[10px] font-black uppercase border border-white/10">Bulking</button>
+                    <button onclick="setMeta('Perder Peso')" id="m-Perder" class="p-4 rounded-2xl text-[10px] font-black uppercase border border-white/10">Cutting</button>
                 </div>
-
-                <button onclick="gerarAgenda()" class="w-full bg-cyan-600 py-6 rounded-[2rem] font-black text-[11px] uppercase shadow-lg active:scale-95 transition-all">Sincronizar Protocolo AI</button>
+                <button onclick="gerarAgenda()" class="w-full bg-cyan-600 py-6 rounded-3xl font-black text-[11px] uppercase shadow-lg shadow-cyan-900/20 active:scale-95 transition-all">Sincronizar Protocolo</button>
             </section>
-
-            <div id="leaderboard" class="space-y-2 px-2"></div>
+            <div id="leaderboard" class="space-y-2"></div>
         </div>
 
         <div id="treinos" class="tab-content space-y-4">
             <div id="agenda-lista" class="space-y-4"></div>
         </div>
 
-        <div id="pro-features" class="tab-content">
-            <div id="nutri-lock" class="bg-white/5 p-12 rounded-[3rem] text-center border-2 border-orange-500/10 backdrop-blur-md">
-                <div class="text-5xl mb-6">💎</div>
-                <h2 class="text-xl font-black uppercase text-orange-500 italic">Bio-IA Pro</h2>
-                <button onclick="abrirModal()" class="mt-8 bg-gradient-to-br from-amber-400 to-orange-600 px-10 py-5 rounded-2xl font-black text-[10px] uppercase shadow-2xl">Assinar Agora</button>
+        <div id="pro-features" class="tab-content text-center py-10">
+            <div id="nutri-lock" class="glass p-10 rounded-[3rem] border border-orange-500/20">
+                <p class="text-4xl mb-4">💎</p>
+                <h2 class="text-xl font-black uppercase text-orange-500">Bio-IA Nutrição</h2>
+                <button onclick="abrirModal()" class="mt-6 bg-orange-600 px-8 py-4 rounded-2xl font-black text-[10px] uppercase">Liberar Pro</button>
             </div>
-            <div id="nutri-content" class="hidden space-y-4"></div>
+            <div id="nutri-content" class="hidden"></div>
         </div>
 
-        <div id="hub" class="tab-content space-y-4">
-            <div class="bg-white/5 p-6 rounded-[2.5rem] border-t-2 border-purple-500/40 backdrop-blur-md">
-                <textarea id="msg-input" placeholder="O que treinou hoje?" class="w-full bg-slate-900/50 p-5 rounded-3xl text-sm text-white outline-none mb-4 h-28 border border-white/5 resize-none"></textarea>
-                <button onclick="postarMensagem()" class="w-full bg-purple-600 py-4 rounded-2xl font-black text-[11px] uppercase shadow-lg">Publicar</button>
-                <div id="feed-comunidade" class="mt-8 space-y-4"></div>
+        <div id="hub" class="tab-content">
+            <div class="bg-slate-900/40 p-6 rounded-[2.5rem]">
+                <textarea id="msg-input" placeholder="O que treinou hoje?" class="w-full bg-slate-950 p-5 rounded-3xl text-sm text-white outline-none mb-4 h-28 border border-white/5"></textarea>
+                <button onclick="postarMensagem()" class="w-full bg-purple-600 py-4 rounded-2xl font-black text-[10px] uppercase">Postar</button>
+                <div id="feed-comunidade" class="mt-6 space-y-4"></div>
             </div>
         </div>
     </main>
 
     <div id="modal-payment" class="fixed inset-0 bg-black/95 z-[100] hidden items-center justify-center p-5 backdrop-blur-md">
-        <div class="bg-slate-900 p-8 rounded-[3.5rem] w-full max-w-sm text-center border border-white/10">
+        <div class="bg-slate-900 p-8 rounded-[3.5rem] w-full max-w-sm text-center border border-white/10 shadow-2xl">
             <div id="step-offer">
-                <h2 class="text-3xl font-black text-white mb-2 uppercase italic">Nexus Pro</h2>
-                <div class="text-4xl font-black text-white mb-8">R$ 19,90</div>
-                <button onclick="gerarPix()" class="w-full bg-gradient-to-br from-amber-400 to-orange-600 py-6 rounded-3xl font-black text-xs uppercase shadow-2xl">Gerar Chave Pix</button>
-                <button onclick="fecharModal()" class="block w-full mt-6 text-[10px] text-slate-600 uppercase font-black">Fechar</button>
+                <h2 class="text-2xl font-black text-white mb-2 uppercase italic">Nexus Pro</h2>
+                <div class="text-4xl font-black text-amber-500 mb-8">R$ 19,90</div>
+                <button onclick="gerarPix()" class="w-full bg-gradient-to-br from-amber-400 to-orange-600 py-6 rounded-3xl font-black text-xs uppercase">Gerar Pix</button>
+                <button onclick="fecharModal()" class="block w-full mt-6 text-[10px] text-slate-500 font-black uppercase">Fechar</button>
             </div>
             <div id="step-checkout" class="hidden">
-                <div class="bg-white p-4 rounded-[2rem] mb-6 w-48 mx-auto"><img id="qr-code" class="w-full"></div>
+                <div class="bg-white p-4 rounded-2xl mb-6 w-48 mx-auto"><img id="qr-code" class="w-full"></div>
                 <button onclick="copiarPix()" class="w-full bg-slate-800 py-4 rounded-2xl text-[10px] font-black uppercase mb-3">Copiar Código</button>
-                <button onclick="confirmarNoWhats()" class="w-full bg-green-600 py-5 rounded-2xl text-[11px] font-black uppercase">Confirmar Pagamento</button>
+                <button onclick="confirmarNoWhats()" class="w-full bg-green-600 py-5 rounded-2xl text-[10px] font-black uppercase shadow-xl">Confirmar Pagamento</button>
             </div>
         </div>
     </div>
 
     <div id="admin-panel" class="fixed inset-0 bg-slate-950/98 z-[999] hidden p-8 flex flex-col justify-center items-center">
-        <button onclick="db.isPro=true; salvar(); atualizarUI(); alert('PRO ATIVADO');" class="w-full max-w-xs py-5 bg-orange-600 text-white rounded-3xl font-black text-[11px] uppercase mb-4">Ativar PRO</button>
-        <button onclick="document.getElementById('admin-panel').classList.add('hidden')" class="text-slate-500 uppercase font-black text-[10px]">Sair</button>
+        <div class="w-full max-w-xs space-y-4">
+            <button onclick="ativarProManual()" class="w-full py-5 bg-orange-600 text-white rounded-3xl font-black text-[10px] uppercase">Ativar PRO Permanente</button>
+            <button onclick="limparBanco()" class="w-full py-5 bg-red-600/20 text-red-500 rounded-3xl font-black text-[10px] uppercase">Resetar Tudo (Limpar Erros)</button>
+            <button onclick="document.getElementById('admin-panel').classList.add('hidden')" class="w-full py-4 text-slate-500 font-black uppercase text-[10px]">Fechar</button>
+        </div>
     </div>
 
     <script>
-        const CONFIG = {
-            CHAVE_PIX: "Nandogabriel.1710@gmail.com",
-            WHATSAPP: "5511994025686",
-            NOME_RECEBEDOR: "Fernando Gabriel"
+        // CONFIGURAÇÕES
+        const PIX_KEY = "Nandogabriel.1710@gmail.com";
+        const WHATSAPP = "5511994025686";
+
+        // BANCO DE DADOS COM TRATAMENTO DE ERRO ABSOLUTO
+        let db;
+        function initDB() {
+            try {
+                const data = localStorage.getItem('Nexus_v14_Sovereign');
+                db = data ? JSON.parse(data) : { xp: 0, isPro: false, meta: 'Ganhar Massa', peso: '', bf: '' };
+            } catch (e) {
+                console.error("Erro no banco, resetando...");
+                db = { xp: 0, isPro: false, meta: 'Ganhar Massa', peso: '', bf: '' };
+            }
+        }
+
+        function salvar() { localStorage.setItem('Nexus_v14_Sovereign', JSON.stringify(db)); }
+
+        // REMOÇÃO DA SPLASH (BLINDAGEM)
+        window.onload = () => {
+            initDB();
+            atualizarUI();
+            // Vincula os inputs manualmente para evitar erros de renderização
+            document.getElementById('user-weight').value = db.peso;
+            document.getElementById('user-bf').value = db.bf;
+            document.getElementById('user-weight').addEventListener('input', (e) => { db.peso = e.target.value; salvar(); atualizarUI(); });
+            document.getElementById('user-bf').addEventListener('input', (e) => { db.bf = e.target.value; salvar(); });
+
+            setTimeout(() => {
+                document.getElementById('splash-screen').classList.add('hidden');
+            }, 1000);
         };
 
-        let db = JSON.parse(localStorage.getItem('Nexus_Final_v2')) || { xp: 0, isPro: false, meta: 'Ganhar Massa', peso: '', bf: '' };
-        let mensagensHub = [{nome: 'Nexus AI', msg: 'Bem-vindo ao protocolo Sovereign.', selo: '🤖', cor: 'text-cyan-400'}];
+        function atualizarUI() {
+            document.getElementById('xp-display').innerText = `XP: ${db.xp.toLocaleString()}`;
+            document.getElementById('user-tier').innerText = db.isPro ? "PRO 👑" : "Basic";
+            
+            // Botões de Meta
+            const bG = document.getElementById('m-Ganhar');
+            const bP = document.getElementById('m-Perder');
+            if(db.meta === 'Ganhar Massa') {
+                bG.className = "p-4 rounded-2xl text-[10px] font-black uppercase bg-cyan-600 text-slate-900";
+                bP.className = "p-4 rounded-2xl text-[10px] font-black uppercase border border-white/10";
+            } else {
+                bP.className = "p-4 rounded-2xl text-[10px] font-black uppercase bg-cyan-600 text-slate-900";
+                bG.className = "p-4 rounded-2xl text-[10px] font-black uppercase border border-white/10";
+            }
 
-        function salvar() { localStorage.setItem('Nexus_Final_v2', JSON.stringify(db)); }
+            // Acesso Pro
+            if(db.isPro) {
+                document.getElementById('btn-upgrade').classList.add('hidden');
+                document.getElementById('nutri-lock').classList.add('hidden');
+                const nCont = document.getElementById('nutri-content');
+                nCont.classList.remove('hidden');
+                const prot = db.peso ? Math.round(db.peso * 2.2) : "---";
+                nCont.innerHTML = `<div class='bg-slate-900 p-8 rounded-[2rem] border border-orange-500/20'><p class='text-[10px] text-orange-500 font-black uppercase mb-1'>Meta de Proteína</p><p class='text-4xl font-black'>${prot}g/dia</p></div>`;
+            }
 
-        function tentarLoginAdmin() {
-            if(prompt("SENHA:") === "1710") document.getElementById('admin-panel').classList.remove
-    
+            renderRanking();
+        }
+
+        function setMeta(m) { db.meta = m; salvar(); atualizarUI(); }
+
+        function gerarAgenda() {
+            const container = document.getElementById('agenda-lista');
+            const treinos = db.meta === 'Ganhar Massa' ? 
+                [{n:'Supino Reto', s:'4x10', x:100}, {n:'Agachamento', s:'4x12', x:100}] : 
+                [{n:'Corrida Sprint', s:'10x', x:150}, {n:'Burpees', s:'5x15', x:120}];
+            
+            container.innerHTML = `<h3 class='text-[10px] font-black text-cyan-500 uppercase italic mb-6'>Protocolo Ativo</h3>`;
+            treinos.forEach(ex => {
+                container.innerHTML += `<div class='bg-slate-900 p-6 rounded-[2rem] flex justify-between items-center mb-4 border-l-4 border-cyan-500'>
+                    <div class='text-[11px] font-black uppercase'>${ex.n}<br><span class='text-slate-500 font-bold'>${ex.s}</span></div>
+                    <button onclick="db.xp+=${ex.x}; salvar(); atualizarUI(); this.innerHTML='🏆'; this.disabled=true;" class='w-12 h-12 bg-cyan-500/10 rounded-2xl flex items-center justify-center text-xl'>⚡</button>
+                </div>`;
+            });
+            openTab(null, 'treinos');
+        }
+
+        function renderRanking() {
+            const r = [{n:'Sovereign AI', x:99999, s:'👑'}, {n:'Você', x:db.xp, s:'⚡'}].sort((a,b)=>b.x-a.x);
+            document.getElementById('leaderboard').innerHTML = r.map((u,i)=>`<div class='bg-slate-950 p-4 rounded-2xl flex justify-between font-black text-[10px] border border-white/5'><span>#${i+1} ${u.s} ${u.n}</span><span class='text-cyan-400'>${u.x} XP</span></div>`).join('');
+        }
+
+        function postarMensagem() {
+            const i = document.getElementById('msg-input');
+            if(!i.value.trim()) return;
+            const feed = document.getElementById('feed-comunidade');
+            feed.innerHTML = `<div class='bg-slate-900/40 p-5 rounded-3xl border border-white/5'><span class='text-[9px] font-black uppercase text-slate-500'>⚡ Membro</span><p class='text-[12px] italic mt-1'>${i.value}</p></div>` + feed.innerHTML;
+            i.value = '';
+        }
+
+        // FUNÇÕES DE UI
+        function openTab(e, t) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-link').forEach(l => { l.classList.remove('border-b-2', 'border-cyan-500', 'text-cyan-500'); l.classList.add('text-slate-500'); });
+            document.getElementById(t).classList.add('active');
+            if(e) { e.currentTarget.classList.add('border-b-2', 'border-cyan-500', 'text-cyan-500'); e.currentTarget.classList.remove('text-slate-500'); }
+        }
+
+        function abrirModal() { document.getElementById('modal-payment').classList.remove('hidden'); document.getElementById('modal-payment').classList.add('flex'); }
+        function fecharModal() { document.getElementById('modal-payment').classList.add('hidden'); document.getElementById('modal-payment').classList.remove('flex'); }
+
+        function gerarPix() {
+            const pix = `00020126360014br.gov.bcb.pix01${PIX_KEY.length}${PIX_KEY}520400005303986540519.905802BR5916FERNANDO GABRIEL6009SAO PAULO62070503***6304`;
+            document.getElementById('qr-code').src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(pix)}`;
+            window.pixCode = pix;
+            document.getElementById('step-offer').classList.add('hidden');
+            document.getElementById('step-checkout').classList.remove('hidden');
+        }
+
+        function copiarPix() { navigator.clipboard.writeText(window.pixCode); alert("Código Copiado!"); }
+        function confirmarNoWhats() { window.open(`https://wa.me/${WHATSAPP}?text=Fiz o pagamento do Nexus Pro!`, '_blank'); }
+
+        // ADMIN
+        function abrirAdmin() { if(prompt("Senha:") === "1710") document.getElementById('admin-panel').classList.remove('hidden'); }
+        function ativarProManual() { db.isPro = true; salvar(); location.reload(); }
+        function limparBanco() { localStorage.clear(); location.reload(); }
+    </script>
+</body>
+</html>
