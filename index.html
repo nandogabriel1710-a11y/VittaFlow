@@ -3,165 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VittaFlow Ultra - Ecossistema Completo</title>
+    <title>VittaFlow 4.0 - AI Premium</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .progress-transition { transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); }
         .dark { background-color: #020617; color: #f8fafc; }
         .dark .bg-white { background-color: #0f172a; color: #f8fafc; border-color: #1e293b; }
-        @keyframes pulse-timer { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); background-color: #ef4444; } }
-        .timer-running { animation: pulse-timer 1s infinite; }
+        @keyframes glow { 0%, 100% { box-shadow: 0 0 15px rgba(168, 85, 247, 0.4); } 50% { box-shadow: 0 0 30px rgba(168, 85, 247, 0.8); } }
+        .ai-card { animation: glow 3s infinite; border: 2px solid rgba(168, 85, 247, 0.3); }
+        .avatar-glow { filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5)); }
     </style>
 </head>
 <body id="body" class="bg-slate-50 font-sans text-slate-800 pb-32 transition-colors duration-500">
 
-    <header class="bg-white p-6 shadow-md border-b border-slate-100 flex justify-between items-center sticky top-0 z-50">
-        <div>
-            <div class="flex items-center gap-2">
-                <div class="w-10 h-10 bg-gradient-to-br from-green-400 to-green-600 rounded-xl flex items-center justify-center text-white font-black shadow-lg">V</div>
-                <h1 class="text-2xl font-black text-green-600 tracking-tighter">VittaFlow</h1>
+    <header class="bg-white p-4 shadow-md border-b border-slate-100 flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-green-500">
+                <img src="https://image.pollinations.ai/prompt/minimalist%20logo%20vittaflow%20water%20drop%20energy%20green%20blue?width=100&height=100" alt="VittaFlow Logo" class="w-full h-full object-cover">
             </div>
-            <p id="xp-texto" class="text-[10px] font-bold text-slate-400 mt-1 uppercase tracking-widest">Nível 1 • 0 XP</p>
+            <div>
+                <h1 class="text-xl font-black text-green-600 tracking-tighter leading-none">VittaFlow</h1>
+                <p id="xp-texto" class="text-[9px] font-bold text-slate-400 uppercase tracking-widest italic">Nível 1 • 0 XP</p>
+            </div>
         </div>
-        <button onclick="toggleDarkMode()" class="p-2 bg-slate-100 dark:bg-slate-800 rounded-xl text-lg shadow-inner">🌓</button>
+        <button onclick="toggleDarkMode()" class="p-2 bg-slate-100 dark:bg-slate-800 rounded-2xl shadow-inner">🌓</button>
     </header>
 
     <main class="p-4 max-w-md mx-auto space-y-6">
         
-        <section class="bg-gradient-to-br from-slate-800 to-slate-900 p-5 rounded-[2rem] text-white shadow-2xl">
-            <h3 class="text-[10px] font-bold uppercase tracking-[0.2em] text-green-400 mb-2">Foco Estratégico</h3>
+        <section class="bg-slate-900 p-5 rounded-[2.5rem] text-white shadow-2xl border-b-4 border-green-500">
+            <h3 class="text-[9px] font-black uppercase tracking-[0.3em] text-green-400 mb-2">Foco Estratégico</h3>
             <textarea id="mural-objetivo" oninput="salvarObjetivo()" 
-                class="bg-transparent w-full text-lg font-medium outline-none resize-none placeholder:text-slate-600" 
-                placeholder="Qual sua meta hoje?"></textarea>
+                class="bg-transparent w-full text-lg font-bold outline-none resize-none placeholder:text-slate-700" 
+                placeholder="Qual sua grande meta?"></textarea>
+        </section>
+
+        <section class="bg-gradient-to-br from-purple-600 to-indigo-800 p-6 rounded-[2.5rem] text-white shadow-2xl relative overflow-hidden ai-card">
+            <div class="relative z-10 flex gap-4 items-start">
+                <div class="flex-shrink-0">
+                    <div class="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/30 overflow-hidden shadow-inner avatar-glow">
+                         <img src="https://image.pollinations.ai/prompt/futuristic%20ai%20avatar%20robot%20health%20fitness%20minimalist%20green%20neon?width=150&height=150" alt="AI Avatar" class="w-full h-full object-cover">
+                    </div>
+                    <div class="mt-1 flex justify-center">
+                        <span class="flex h-2 w-2 rounded-full bg-green-400 animate-ping"></span>
+                    </div>
+                </div>
+                
+                <div class="flex-1">
+                    <h3 class="font-black text-sm italic uppercase tracking-tighter mb-1 text-purple-200">Assistente Vital</h3>
+                    <p id="ai-resposta" class="text-[11px] leading-relaxed font-medium bg-black/30 p-3 rounded-2xl border border-white/10">
+                        "E aí! Analisei seu perfil. Pronto para bater sua meta hoje?"
+                    </p>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3 mt-5 relative z-10">
+                <button onclick="gerarPlano('treino')" class="bg-white text-purple-700 py-3 rounded-2xl font-black text-[10px] uppercase shadow-xl hover:scale-105 active:scale-95 transition">Sugerir Treino</button>
+                <button onclick="gerarPlano('dieta')" class="bg-purple-900/50 text-white py-3 rounded-2xl font-black text-[10px] uppercase border border-white/20 backdrop-blur-md hover:scale-105 active:scale-95 transition">Sugerir Dieta</button>
+            </div>
         </section>
 
         <section class="bg-white p-6 rounded-[2.5rem] shadow-xl border border-slate-100">
             <div class="flex justify-between mb-4 items-center">
-                <h2 class="font-black text-xl italic uppercase tracking-tighter text-slate-700 dark:text-slate-200">Energia</h2>
-                <span id="porcentagem-texto" class="text-xs font-black text-green-600 bg-green-100 dark:bg-green-900/40 px-3 py-1 rounded-full">0%</span>
+                <h2 class="font-black text-xl italic uppercase tracking-tighter">Energia</h2>
+                <span id="porcentagem-texto" class="text-xs font-black text-green-600 bg-green-50 px-3 py-1 rounded-full">0%</span>
             </div>
-            
             <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-5 overflow-hidden p-1">
                 <div id="barra-progresso" class="bg-gradient-to-r from-green-400 to-green-600 h-full rounded-full progress-transition" style="width: 0%"></div>
             </div>
-
-            <div class="grid grid-cols-3 gap-4 mt-8">
-                <div class="text-center">
-                    <span id="macro-prot" class="block text-lg font-black text-orange-500">0g</span>
-                    <span class="text-[8px] uppercase font-bold text-slate-400">Proteína</span>
+            <div class="grid grid-cols-3 gap-2 mt-8">
+                <div class="bg-orange-50 dark:bg-orange-950/20 p-3 rounded-2xl text-center">
+                    <span id="macro-prot" class="block text-lg font-black text-orange-600">0g</span>
+                    <span class="text-[8px] uppercase font-bold text-slate-400 tracking-widest">Proteína</span>
                 </div>
-                <div class="text-center border-x border-slate-100 dark:border-slate-800">
-                    <span id="macro-carb" class="block text-lg font-black text-blue-500">0g</span>
-                    <span class="text-[8px] uppercase font-bold text-slate-400">Carbos</span>
+                <div class="bg-blue-50 dark:bg-blue-950/20 p-3 rounded-2xl text-center">
+                    <span id="macro-carb" class="block text-lg font-black text-blue-600">0g</span>
+                    <span class="text-[8px] uppercase font-bold text-slate-400 tracking-widest">Carbos</span>
                 </div>
-                <div class="text-center">
-                    <span id="macro-gord" class="block text-lg font-black text-yellow-500">0g</span>
-                    <span class="text-[8px] uppercase font-bold text-slate-400">Gordura</span>
-                </div>
-            </div>
-        </section>
-
-        <section class="bg-white dark:bg-slate-900 p-5 rounded-[2rem] flex items-center justify-between shadow-lg border border-slate-100 dark:border-slate-800">
-            <div>
-                <h3 class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Descanso de Série</h3>
-                <span id="timer-display" class="text-3xl font-mono font-black">00:45</span>
-            </div>
-            <button id="btn-timer" onclick="toggleTimer()" class="bg-slate-900 dark:bg-green-600 text-white w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg transition-all active:scale-90">
-                <span id="timer-icon" class="text-2xl">⏱️</span>
-            </button>
-        </section>
-
-        <section class="bg-blue-600 p-6 rounded-[2.5rem] text-white shadow-lg relative overflow-hidden">
-            <div class="relative z-10">
-                <h3 class="font-black text-xl italic uppercase">Água</h3>
-                <div id="container-agua" class="mt-4 flex flex-wrap gap-2 min-h-[40px] text-2xl"></div>
-            </div>
-            <button onclick="adicionarAgua()" class="absolute right-6 top-1/2 -translate-y-1/2 bg-white text-blue-600 w-16 h-16 rounded-[1.5rem] font-black shadow-2xl flex items-center justify-center text-3xl active:scale-110 transition-all">+</button>
-        </section>
-
-        <section>
-            <h2 class="text-lg font-black mb-3 uppercase tracking-tighter">Missões de Hoje</h2>
-            <div class="space-y-3">
-                <div class="flex items-center bg-white p-4 rounded-3xl shadow-sm border border-transparent">
-                    <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-2xl flex items-center justify-center text-2xl mr-4">🏃</div>
-                    <div class="flex-1">
-                        <h3 class="font-bold text-sm">Polichinelos</h3>
-                        <p class="text-[10px] text-slate-500">30 seg • +50 kcal</p>
-                    </div>
-                    <input type="checkbox" id="exe-1" onchange="alternarExercicio(this, 'exe-1', 50, 20)" class="w-6 h-6 rounded-full text-green-600">
+                <div class="bg-yellow-50 dark:bg-yellow-950/20 p-3 rounded-2xl text-center">
+                    <span id="macro-gord" class="block text-lg font-black text-yellow-600">0g</span>
+                    <span class="text-[8px] uppercase font-bold text-slate-400 tracking-widest">Gorduras</span>
                 </div>
             </div>
         </section>
 
-        <section>
-            <h2 class="text-lg font-black mb-3 uppercase tracking-tighter">Cozinha VittaFlow</h2>
-            <div id="lista-receitas" class="flex gap-4 overflow-x-auto pb-4 scrollbar-hide"></div>
+        <section class="space-y-4">
+            <h2 class="text-lg font-black uppercase tracking-tighter flex items-center gap-2">🏋️ Missões Disponíveis</h2>
+            <div id="lista-treinos" class="space-y-3"></div>
         </section>
 
-        <section class="bg-white p-5 rounded-[2rem] shadow-sm border border-slate-100">
-            <h2 class="font-black text-sm uppercase mb-4 tracking-widest">⚖️ Evolução</h2>
-            <div class="flex gap-2">
-                <input type="number" step="0.1" id="input-peso" class="flex-1 p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl outline-none" placeholder="kg">
-                <button onclick="registrarPeso()" class="bg-green-500 text-white px-6 rounded-2xl font-black active:scale-95 transition">OK</button>
+        <section class="grid grid-cols-2 gap-4">
+            <div class="bg-blue-600 p-5 rounded-[2.5rem] text-white shadow-lg text-center">
+                <h3 class="font-black text-[10px] uppercase mb-2">Hidratação</h3>
+                <div id="container-agua" class="text-xl h-8 mb-2"></div>
+                <button onclick="adicionarAgua()" class="bg-white/20 hover:bg-white/30 w-full py-2 rounded-xl text-lg transition">+</button>
             </div>
-            <div id="historico-peso" class="mt-4 flex gap-3 overflow-x-auto py-2 scrollbar-hide"></div>
-        </section>
-
-        <section class="bg-slate-200 dark:bg-slate-800 p-5 rounded-3xl">
-            <h2 class="font-bold text-xs mb-3 uppercase opacity-50">Sua Meta Diária (Kcal)</h2>
-            <div class="flex gap-2">
-                <input type="number" id="input-meta" class="flex-1 p-2 bg-white dark:bg-slate-700 rounded-xl outline-none" placeholder="2000">
-                <button onclick="salvarNovaMeta()" class="bg-slate-900 text-white px-4 rounded-xl text-xs font-bold">Salvar</button>
+            <div class="bg-slate-900 p-5 rounded-[2.5rem] text-white shadow-lg text-center border border-slate-700">
+                <h3 class="font-black text-[10px] uppercase mb-2">Descanso</h3>
+                <span id="timer-display" class="block text-2xl font-mono font-black mb-2">00:45</span>
+                <button onclick="toggleTimer()" id="btn-timer" class="bg-green-500 w-full py-2 rounded-xl text-xs font-black uppercase">Play</button>
             </div>
         </section>
 
-        <button onclick="compartilharNoZap()" class="w-full bg-[#25D366] text-white py-6 rounded-[2rem] font-black shadow-xl flex items-center justify-center gap-3 uppercase tracking-tighter active:scale-95 transition-all">
-            🚀 Compartilhar Progresso
+        <button onclick="compartilharNoZap()" class="w-full bg-[#25D366] text-white py-6 rounded-[2.5rem] font-black shadow-2xl uppercase tracking-widest text-sm hover:scale-[1.02] active:scale-95 transition-all">
+            🚀 Gerar Report Premium
         </button>
-
-        <button onclick="resetarDia()" class="w-full text-slate-400 text-[10px] font-bold uppercase tracking-widest mt-4">Reiniciar Sistema</button>
 
     </main>
 
     <script>
-        // BASE DE DADOS UNIFICADA
-        let db = JSON.parse(localStorage.getItem('vittaFlowUltra')) || {
+        let db = JSON.parse(localStorage.getItem('vittaFlowUltra_AI')) || {
             kcal: 0, prot: 0, carb: 0, gord: 0, objetivo: "",
             agua: 0, xp: 0, histPeso: [], dark: false, metaKcal: 2000,
             concluidos: []
         };
 
+        const treinosLib = [
+            {id: 't1', n: 'Cárdio: Polichinelos', k: 50, x: 20, i: '🏃'},
+            {id: 't2', n: 'Força: Agachamentos', k: 80, x: 35, i: '🏋️'},
+            {id: 't3', n: 'Força: Flexões', k: 70, x: 30, i: '💪'},
+            {id: 't4', n: 'Mobility: Yoga', k: 25, x: 40, i: '🧘'}
+        ];
+
         let timerInterval, timeLeft = 45, isTimerRunning = false;
 
-        function salvar() { localStorage.setItem('vittaFlowUltra', JSON.stringify(db)); }
-
-        function toggleDarkMode() { db.dark = !db.dark; aplicarTema(); salvar(); }
+        function salvar() { localStorage.setItem('vittaFlowUltra_AI', JSON.stringify(db)); }
         function aplicarTema() { document.getElementById('body').classList.toggle('dark', db.dark); }
+        function toggleDarkMode() { db.dark = !db.dark; aplicarTema(); salvar(); }
         function salvarObjetivo() { db.objetivo = document.getElementById('mural-objetivo').value; salvar(); }
 
-        function toggleTimer() {
-            const btn = document.getElementById('btn-timer');
-            const display = document.getElementById('timer-display');
-            if (isTimerRunning) {
-                clearInterval(timerInterval);
-                timeLeft = 45;
-                display.innerText = "00:45";
-                btn.classList.remove('timer-running', 'bg-red-500');
-                isTimerRunning = false;
-            } else {
-                isTimerRunning = true;
-                btn.classList.add('timer-running', 'bg-red-500');
-                timerInterval = setInterval(() => {
-                    timeLeft--;
-                    display.innerText = `00:${timeLeft < 10 ? '0'+timeLeft : timeLeft}`;
-                    if (timeLeft <= 0) {
-                        clearInterval(timerInterval);
-                        alert("Descanso finalizado!");
-                        toggleTimer();
-                    }
-                }, 1000);
-            }
+        function gerarPlano(tipo) {
+            const resp = document.getElementById('ai-resposta');
+            const obj = db.objetivo || "sua saúde";
+            resp.innerText = "🤖 Pensando...";
+            setTimeout(() => {
+                if(tipo === 'treino') {
+                    const t = treinosLib[Math.floor(Math.random()*treinosLib.length)];
+                    resp.innerText = `IA: Para "${obj}", hoje sua missão é: ${t.n}. Vamos ganhar esses ${t.x} XP?`;
+                } else {
+                    resp.innerText = `IA: Como foco é "${obj}", sua meta é bater ${db.metaKcal} kcal. Comece com 30g de proteína no café!`;
+                }
+                db.xp += 10; atualizarUI(); salvar();
+            }, 800);
         }
 
         function atualizarUI() {
@@ -169,74 +152,62 @@
             document.getElementById('macro-carb').innerText = db.carb + 'g';
             document.getElementById('macro-gord').innerText = db.gord + 'g';
             document.getElementById('mural-objetivo').value = db.objetivo;
-            document.getElementById('input-meta').value = db.metaKcal;
-            
             let perc = Math.min(Math.round((db.kcal / db.metaKcal) * 100), 100);
             document.getElementById('barra-progresso').style.width = perc + "%";
             document.getElementById('porcentagem-texto').innerText = perc + "%";
-            document.getElementById('xp-texto').innerText = `Nível ${Math.floor(db.xp/100)+1} • ${db.xp} XP`;
-
-            document.getElementById('historico-peso').innerHTML = db.histPeso.map(p => `
-                <div class="bg-white dark:bg-slate-800 p-3 rounded-2xl text-center min-w-[85px] border border-slate-100 dark:border-slate-700">
-                    <span class="text-[9px] block text-slate-400 font-bold uppercase">${p.data}</span>
-                    <span class="font-black text-sm">${p.valor}kg</span>
-                </div>
-            `).reverse().join('');
+            document.getElementById('xp-texto').innerText = `Nível ${Math.floor(db.xp/100)+1} • ${db.xp} XP • MASTER`;
         }
 
-        function adicionarAgua() { db.agua++; db.xp += 10; renderAgua(); atualizarUI(); salvar(); }
-        function renderAgua() { document.getElementById('container-agua').innerHTML = "💧".repeat(db.agua); }
-
-        function registrarPeso() {
-            const v = document.getElementById('input-peso').value;
-            if(v > 20) {
-                db.histPeso.push({valor: v, data: new Date().toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit'})});
-                db.xp += 50; document.getElementById('input-peso').value = '';
-                atualizarUI(); salvar();
+        function toggleTimer() {
+            const btn = document.getElementById('btn-timer');
+            if(isTimerRunning) {
+                clearInterval(timerInterval); timeLeft = 45; isTimerRunning = false;
+                document.getElementById('timer-display').innerText = "00:45";
+                btn.innerText = "Play"; btn.classList.replace('bg-red-500', 'bg-green-500');
+            } else {
+                isTimerRunning = true; btn.innerText = "Stop"; btn.classList.replace('bg-green-500', 'bg-red-500');
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    document.getElementById('timer-display').innerText = `00:${timeLeft < 10 ? '0'+timeLeft : timeLeft}`;
+                    if(timeLeft <= 0) { clearInterval(timerInterval); alert("Descanso Concluído!"); toggleTimer(); }
+                }, 1000);
             }
         }
 
-        function alternarExercicio(cb, id, cal, xp) {
-            if(cb.checked) { db.kcal += cal; db.xp += xp; db.concluidos.push(id); }
-            else { db.kcal -= cal; db.xp -= xp; db.concluidos = db.concluidos.filter(i => i !== id); }
+        function renderTreinos() {
+            const cont = document.getElementById('lista-treinos');
+            cont.innerHTML = treinosLib.map(t => `
+                <div class="flex items-center bg-white dark:bg-slate-800 p-4 rounded-[2rem] shadow-sm border border-slate-100 dark:border-slate-700">
+                    <div class="w-12 h-12 bg-slate-50 dark:bg-slate-900 rounded-2xl flex items-center justify-center text-2xl mr-4 shadow-inner">${t.i}</div>
+                    <div class="flex-1">
+                        <h3 class="font-black text-sm uppercase tracking-tighter">${t.n}</h3>
+                        <p class="text-[9px] text-slate-400 font-bold">+${t.k} kcal | +${t.x} XP</p>
+                    </div>
+                    <input type="checkbox" onchange="alternarExer(this, ${t.k}, ${t.x})" class="w-8 h-8 rounded-full border-2 border-slate-200 accent-green-500">
+                </div>
+            `).join('');
+        }
+
+        function alternarExer(cb, k, x) {
+            if(cb.checked) { db.kcal += k; db.xp += x; }
+            else { db.kcal -= k; db.xp -= x; }
             atualizarUI(); salvar();
         }
 
-        function addComida(p, c, g, cal) {
-            db.prot += p; db.carb += c; db.gord += g; db.kcal += cal; db.xp += 15;
-            atualizarUI(); salvar();
-            alert("Refeição adicionada!");
-        }
+        function adicionarAgua() { db.agua++; db.xp += 5; renderAgua(); atualizarUI(); salvar(); }
+        function renderAgua() { document.getElementById('container-agua').innerText = "💧".repeat(db.agua); }
 
-        function salvarNovaMeta() {
-            db.metaKcal = document.getElementById('input-meta').value;
-            salvar(); atualizarUI(); alert("Meta atualizada!");
+        function registrarPeso() {
+            const v = document.getElementById('input-peso').value;
+            if(v > 20) { db.histPeso.push({valor: v, data: "hoje"}); db.xp += 50; atualizarUI(); salvar(); }
         }
 
         function compartilharNoZap() {
-            const msg = `🚀 *VITTAFLOW ULTRA* %0A🏆 XP: ${db.xp}%0A🎯 Meta: ${db.objetivo}%0A💧 Água: ${db.agua} copos%0A📊 Energia: ${document.getElementById('porcentagem-texto').innerText}`;
+            const msg = `🔥 *VITTAFLOW ULTRA REPORT* %0A🏆 Nível: ${Math.floor(db.xp/100)+1}%0A🎯 Meta: ${db.objetivo}%0A⚡ Status: ${document.getElementById('porcentagem-texto').innerText} Concluído`;
             window.open(`https://api.whatsapp.com/send?text=${msg}`, '_blank');
         }
 
-        function resetarDia() { if(confirm("Zerar progresso de hoje?")) { localStorage.clear(); location.reload(); } }
-
-        window.onload = () => { 
-            aplicarTema(); atualizarUI(); renderAgua();
-            const recCont = document.getElementById('lista-receitas');
-            const receitas = [
-                {n: "Omelete", p:20, c:2, g:15, cal:250, i: "🍳"},
-                {n: "Shake", p:25, c:30, g:5, cal:300, i: "🥤"},
-                {n: "Frango", p:30, c:40, g:8, cal:420, i: "🍗"}
-            ];
-            receitas.forEach(r => {
-                recCont.innerHTML += `
-                <div onclick="addComida(${r.p},${r.c},${r.g},${r.cal})" class="min-w-[140px] bg-white dark:bg-slate-800 p-4 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm text-center active:scale-95 transition cursor-pointer">
-                    <span class="text-3xl">${r.i}</span>
-                    <h4 class="font-bold text-xs mt-2">${r.n}</h4>
-                    <p class="text-[10px] text-green-500 font-black">+${r.cal} kcal</p>
-                </div>`;
-            });
-        };
+        window.onload = () => { aplicarTema(); atualizarUI(); renderAgua(); renderTreinos(); };
     </script>
 </body>
 </html>
