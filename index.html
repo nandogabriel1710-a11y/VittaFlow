@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Nexus v21.4 - Sovereign Final</title>
+    <title>Nexus v21.5 - Sovereign Final</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root { --accent: #06b6d4; --bg: #020617; }
         body { background: var(--bg); color: white; margin: 0; font-family: 'Inter', sans-serif; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
         .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.08); }
         
-        /* Splash Screen HyperDrive */
         #splash-screen {
             position: fixed; inset: 0; background: var(--bg); z-index: 10000;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -18,7 +17,6 @@
         }
         .hide-splash { transform: translateY(-100%); pointer-events: none; }
         
-        /* Trava de Segurança Alpha */
         #alpha-lock {
             position: fixed; inset: 0; background: var(--bg); z-index: 20000;
             display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px;
@@ -43,11 +41,11 @@
         <div class="w-20 h-20 bg-cyan-500/10 rounded-3xl flex items-center justify-center mb-8 border border-cyan-500/20 mx-auto">
             <span class="text-3xl text-cyan-500">🔒</span>
         </div>
-        <h2 class="text-2xl font-black uppercase mb-2">Acesso Restrito</h2>
+        <h2 class="text-2xl font-black uppercase mb-2 text-white">Acesso Restrito</h2>
         <p class="text-[10px] text-slate-500 uppercase tracking-widest mb-8 italic">Versão Alpha Sovereign</p>
         
         <div class="glass p-6 rounded-[2rem] w-full max-w-xs mx-auto mb-6">
-            <input type="text" id="alpha-key" placeholder="CHAVE DE ACESSO" class="w-full bg-transparent text-center text-lg font-black outline-none placeholder:text-slate-800 uppercase tracking-widest">
+            <input type="text" id="alpha-key" placeholder="CHAVE DE ACESSO" class="w-full bg-transparent text-center text-lg font-black outline-none placeholder:text-slate-800 uppercase tracking-widest text-white">
         </div>
         
         <button onclick="verificarChave()" class="w-full max-w-xs bg-cyan-600 py-5 rounded-2xl font-black text-[10px] uppercase shadow-xl active:scale-95 transition-all mb-6">Autenticar Sistema</button>
@@ -81,11 +79,11 @@
                 <div class="grid grid-cols-2 gap-4 mb-6">
                     <div class="bg-white/5 p-4 rounded-2xl">
                         <label class="text-[8px] text-slate-500 uppercase font-black">Massa (kg)</label>
-                        <input id="u-weight" type="number" step="0.1" class="bg-transparent w-full text-xl font-black outline-none">
+                        <input id="u-weight" type="number" step="0.1" class="bg-transparent w-full text-xl font-black outline-none text-white">
                     </div>
                     <div class="bg-white/5 p-4 rounded-2xl">
                         <label class="text-[8px] text-slate-500 uppercase font-black">Gordura (%)</label>
-                        <input id="u-bf" type="number" class="bg-transparent w-full text-xl font-black outline-none">
+                        <input id="u-bf" type="number" class="bg-transparent w-full text-xl font-black outline-none text-white">
                     </div>
                 </div>
                 <div class="flex gap-2 mb-6">
@@ -107,20 +105,20 @@
                     <button onclick="toggleIA('dieta')" id="btn-ia-dieta" class="flex-1 py-4 bg-orange-500 rounded-2xl text-[9px] font-black uppercase text-slate-950">Planilha Dieta</button>
                     <button onclick="toggleIA('treino')" id="btn-ia-treino" class="flex-1 py-4 glass rounded-2xl text-[9px] font-black uppercase">Periodização</button>
                 </div>
-                <div id="ia-output" class="glass p-7 rounded-[2.5rem] min-h-[300px] border-t-2 border-orange-500/30 text-[10px] leading-relaxed"></div>
+                <div id="ia-output" class="glass p-7 rounded-[2.5rem] min-h-[300px] border-t-2 border-orange-500/30 text-[10px] leading-relaxed text-white"></div>
             </div>
         </div>
 
         <div id="hub" class="tab-content">
             <div class="glass p-6 rounded-[2.5rem] space-y-4">
-                <textarea id="msg-input" placeholder="Relate o treino de hoje..." class="w-full bg-white/5 p-5 rounded-3xl text-xs outline-none h-24 border border-white/5 resize-none"></textarea>
+                <textarea id="msg-input" placeholder="Relate o treino de hoje..." class="w-full bg-white/5 p-5 rounded-3xl text-xs outline-none h-24 border border-white/5 resize-none text-white"></textarea>
                 <button onclick="postar()" class="w-full bg-purple-600 py-4 rounded-2xl font-black text-[9px] uppercase">Enviar para o Feed</button>
                 <div id="feed" class="space-y-3 mt-6"></div>
             </div>
         </div>
     </main>
 
-    <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] h-18 glass rounded-3xl z-50 flex items-center justify-around shadow-2xl">
+    <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] h-18 glass rounded-3xl z-50 flex items-center justify-around shadow-2xl px-2">
         <button onclick="nav(event, 'dash')" class="nav-active flex flex-col items-center gap-1.5"><span class="text-xl">👤</span><span class="text-[7px] font-black uppercase">Bio</span></button>
         <button onclick="nav(event, 'treinos')" class="text-slate-500 flex flex-col items-center gap-1.5"><span class="text-xl">💪</span><span class="text-[7px] font-black uppercase">Ação</span></button>
         <button onclick="nav(event, 'pro-features')" class="text-orange-500/40 flex flex-col items-center gap-1.5"><span class="text-xl">🧠</span><span class="text-[7px] font-black uppercase">Neural</span></button>
@@ -130,7 +128,6 @@
     <div id="admin-panel" class="fixed inset-0 bg-slate-950 z-[1000] hidden p-12 flex flex-col justify-center gap-4">
         <h3 class="text-center font-black text-cyan-500 mb-8 uppercase tracking-[0.3em]">Root Panel</h3>
         <button onclick="localStorage.clear(); location.reload();" class="w-full py-6 bg-red-900/20 text-red-500 border border-red-900 rounded-3xl font-black uppercase text-xs">Wipe App Data</button>
-        <button onclick="db.xp += 50000; save(); atualizarUI();" class="w-full py-6 bg-cyan-900/20 text-cyan-500 border border-cyan-900 rounded-3xl font-black uppercase text-xs">Inject 50k XP</button>
         <button onclick="document.getElementById('admin-panel').classList.add('hidden')" class="mt-8 text-slate-700 uppercase text-[9px] font-black text-center">Close Terminal</button>
     </div>
 
@@ -139,11 +136,11 @@
         let db;
 
         function init() {
-            const data = localStorage.getItem('Nexus_v21_4');
+            const data = localStorage.getItem('Nexus_v21_5');
             db = data ? JSON.parse(data) : { xp: 0, unlocked: false, weight: '', bf: '', meta: 'Bulking' };
         }
 
-        function save() { localStorage.setItem('Nexus_v21_4', JSON.stringify(db)); }
+        function save() { localStorage.setItem('Nexus_v21_5', JSON.stringify(db)); }
 
         function showToast(m, c="#06b6d4") {
             const t = document.getElementById('toast');
@@ -162,14 +159,22 @@
             }
         });
 
+        // FUNÇÃO CORRIGIDA: DESBLOQUEIO INSTANTÂNEO
         function verificarChave() {
             const val = document.getElementById('alpha-key').value;
             if(val === CHAVE_CORRETA) {
-                db.unlocked = true; save();
-                showToast("Acesso Sovereign Liberado!");
-                setTimeout(() => location.reload(), 800);
+                db.unlocked = true; 
+                save();
+                showToast("Acesso Sovereign Liberado!", "#10b981");
+                
+                // Esconde a trava e inicia o app sem reload para não bugar
+                setTimeout(() => {
+                    document.getElementById('alpha-lock').style.display = 'none';
+                    startApp();
+                }, 800);
             } else {
                 showToast("Chave Inválida", "#ef4444");
+                document.getElementById('alpha-key').value = "";
             }
         }
 
@@ -179,7 +184,7 @@
             atualizarUI();
             setTimeout(() => {
                 document.getElementById('splash-screen').classList.add('hide-splash');
-            }, 150); // HyperDrive 150ms
+            }, 150); 
         }
 
         function atualizarUI() {
@@ -199,31 +204,19 @@
             const p = parseFloat(db.weight) || 70;
             if(tipo === 'dieta') {
                 const kcal = db.meta === 'Bulking' ? Math.round(p * 38) : Math.round(p * 26);
-                out.innerHTML = `<h3 class='text-orange-500 font-black mb-4 uppercase tracking-tighter'>Planilha Neural v21.4</h3>
-                <div class='space-y-4'>
-                    <div class='bg-white/5 p-4 rounded-2xl'><p class='text-white font-bold'>Déficit/Superávit:</p><p class='text-lg font-black'>${kcal} kcal/dia</p></div>
-                    <div class='bg-white/5 p-4 rounded-2xl'><p class='text-white font-bold'>Base Proteica:</p><p class='text-lg font-black'>${Math.round(p*2.2)}g Proteína</p></div>
-                    <p class='italic opacity-60'>*Sugestão Fundador: 5 Refeições sólidas, foco em densidade calórica.</p>
-                </div>`;
+                out.innerHTML = `<h3 class='text-orange-500 font-black mb-4 uppercase tracking-tighter'>Planilha Neural v21.5</h3><div class='space-y-4'><div class='bg-white/5 p-4 rounded-2xl'><p class='text-white font-bold'>Meta Calórica:</p><p class='text-lg font-black'>${kcal} kcal/dia</p></div><div class='bg-white/5 p-4 rounded-2xl'><p class='text-white font-bold'>Proteína:</p><p class='text-lg font-black'>${Math.round(p*2.2)}g</p></div></div>`;
             } else {
-                out.innerHTML = `<h3 class='text-orange-500 font-black mb-4 uppercase tracking-tighter'>Periodização Alpha</h3>
-                <div class='space-y-3 opacity-80'>
-                    <p><b>SEG:</b> Empurrar (Foco Peitoral Superior)</p>
-                    <p><b>TER:</b> Puxar (Foco Largura de Costas)</p>
-                    <p><b>QUA:</b> Pernas (Foco Quadríceps)</p>
-                    <p><b>QUI:</b> Superiores Completo (Pump)</p>
-                    <p><b>SEX:</b> Perna + Abdómen</p>
-                </div>`;
+                out.innerHTML = `<h3 class='text-orange-500 font-black mb-4 uppercase tracking-tighter'>Periodização Alpha</h3><div class='space-y-3 opacity-80'><p><b>SEG:</b> Empurrar (Peitoral)</p><p><b>TER:</b> Puxar (Costas)</p><p><b>QUA:</b> Pernas</p></div>`;
             }
         }
 
         function gerarProtocolo() {
             showToast("Sincronizando Dados...");
             const list = document.getElementById('lista-exercicios');
-            const treinos = db.meta === 'Bulking' ? [{n:'Supino Inclinado', s:'4x8-10'}, {n:'Agachamento Livre', s:'4x8-12'}] : [{n:'Burpees', s:'20 Reps'}, {n:'Flexão de Braço', s:'Falha'}];
-            list.innerHTML = `<h3 class='text-[9px] font-black text-cyan-500 uppercase mb-4'>Protocolo Diário Ativo</h3>`;
+            const treinos = db.meta === 'Bulking' ? [{n:'Supino Inclinado', s:'4x10'}, {n:'Agachamento', s:'4x10'}] : [{n:'Burpees', s:'20 Reps'}, {n:'Flexão', s:'Falha'}];
+            list.innerHTML = `<h3 class='text-[9px] font-black text-cyan-500 uppercase mb-4'>Protocolo Ativo</h3>`;
             treinos.forEach(ex => {
-                list.innerHTML += `<div class='glass p-6 rounded-[2rem] flex justify-between items-center mb-3'><div><p class='font-black uppercase text-xs'>${ex.n}</p><p class='text-[8px] text-slate-500'>${ex.s}</p></div><button onclick="addXP(this, 250)" class='w-12 h-12 bg-cyan-500/10 rounded-2xl text-xl transition-all'>⚡</button></div>`;
+                list.innerHTML += `<div class='glass p-6 rounded-[2rem] flex justify-between items-center mb-3 text-white'><div><p class='font-black uppercase text-xs'>${ex.n}</p><p class='text-[8px] text-slate-500'>${ex.s}</p></div><button onclick="addXP(this, 250)" class='w-12 h-12 bg-cyan-500/10 rounded-2xl text-xl'>⚡</button></div>`;
             });
             nav(null, 'treinos');
         }
@@ -231,12 +224,16 @@
         function addXP(btn, v) { 
             db.xp += v; save(); atualizarUI(); 
             btn.innerHTML = '🏆'; btn.disabled = true; 
-            showToast(`+${v} XP Conquistado!`, "#10b981");
+            showToast(`+${v} XP`, "#10b981");
         }
 
         function nav(e, tab) {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.getElementById(tab).classList.add('active');
+            if(e) {
+                document.querySelectorAll('nav button').forEach(b => b.classList.replace('nav-active', 'text-slate-500'));
+                e.currentTarget.classList.add('nav-active');
+            }
             window.scrollTo(0,0);
         }
 
@@ -245,20 +242,20 @@
         function postar() {
             const i = document.getElementById('msg-input');
             if(!i.value.trim()) return;
-            document.getElementById('feed').innerHTML = `<div class='glass p-5 rounded-[1.5rem] text-[10px] italic border-l-2 border-purple-500 mb-3 animate-pulse'>${i.value}</div>` + document.getElementById('feed').innerHTML;
-            i.value = ''; showToast("Feed Atualizado!");
+            document.getElementById('feed').innerHTML = `<div class='glass p-5 rounded-[1.5rem] text-[10px] italic border-l-2 border-purple-500 mb-3 text-white'>${i.value}</div>` + document.getElementById('feed').innerHTML;
+            i.value = ''; showToast("Publicado!");
         }
 
         function renderRank() {
             const r = [{n:'Sovereign', x:500000}, {n:'Você', x:db.xp}].sort((a,b)=>b.x-a.x);
-            document.getElementById('leaderboard').innerHTML = r.map((u,i)=>`<div class='bg-white/5 p-4 rounded-xl flex justify-between text-[9px] font-black uppercase'><span>#${i+1} ${u.n}</span><span class='text-cyan-400'>${u.x.toLocaleString()} XP</span></div>`).join('');
+            document.getElementById('leaderboard').innerHTML = r.map((u,i)=>`<div class='bg-white/5 p-4 rounded-xl flex justify-between text-[9px] font-black uppercase text-white'><span>#${i+1} ${u.n}</span><span class='text-cyan-400'>${u.x.toLocaleString()} XP</span></div>`).join('');
         }
 
-        function abrirAdmin() { if(prompt("Nexus Root Password:") === "1710") document.getElementById('admin-panel').classList.remove('hidden'); }
+        function abrirAdmin() { if(prompt("Root:") === "1710") document.getElementById('admin-panel').classList.remove('hidden'); }
         
         document.getElementById('u-weight').onchange = (e) => { db.weight = e.target.value; save(); };
         document.getElementById('u-bf').onchange = (e) => { db.bf = e.target.value; save(); };
     </script>
 </body>
-                    </html>
+    </html>
     
