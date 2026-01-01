@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus AI v12.1 - Sovereign</title>
+    <title>Nexus AI v12.5 - Master Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .premium-gradient { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
@@ -11,27 +11,22 @@
         .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); }
         .active-tab { border-bottom: 4px solid #06b6d4; color: #06b6d4; }
         .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.5s ease; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
         
-        /* Splash Screen */
+        /* Splash Screen Turbo (1s) */
         #splash-screen {
             position: fixed; inset: 0; background: #020617; z-index: 999;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            transition: opacity 0.8s ease, visibility 0.8s;
+            transition: opacity 0.4s ease, visibility 0.4s;
         }
         .logo-pulse {
-            width: 80px; height: 80px; background: #06b6d4; border-radius: 20px;
+            width: 70px; height: 70px; background: #06b6d4; border-radius: 18px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 40px; font-weight: 900; color: #020617;
-            box-shadow: 0 0 30px rgba(6, 182, 212, 0.4);
-            animation: pulse-logo 2s infinite;
+            font-size: 35px; font-weight: 900; color: #020617;
+            animation: pulse-logo 1s infinite;
         }
-        @keyframes pulse-logo {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(6, 182, 212, 0.4); }
-            50% { transform: scale(1.1); box-shadow: 0 0 50px rgba(6, 182, 212, 0.7); }
-        }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes loading { to { width: 100%; } }
+        @keyframes pulse-logo { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
         .hide-splash { opacity: 0; visibility: hidden; }
         ::-webkit-scrollbar { display: none; }
     </style>
@@ -39,13 +34,12 @@
 <body class="nexus-dark text-slate-100 font-sans pb-28">
 
     <div id="splash-screen">
-        <div class="logo-pulse mb-6">N</div>
-        <h2 class="text-xs font-black uppercase tracking-[0.3em] text-cyan-500 animate-pulse">Iniciando Nexus AI</h2>
-        <div class="w-32 h-1 bg-slate-800 rounded-full mt-4 overflow-hidden">
-            <div class="h-full bg-cyan-500 w-0 animate-[loading_2.5s_ease-in-out_forwards]"></div>
+        <div class="logo-pulse mb-4">N</div>
+        <div class="w-24 h-1 bg-slate-800 rounded-full overflow-hidden">
+            <div class="h-full bg-cyan-500 w-0 animate-[loading_1s_ease-in-out_forwards]"></div>
         </div>
-        <p class="text-[8px] text-slate-600 mt-8 uppercase font-bold tracking-widest">Protocolo Vagner v12.1</p>
     </div>
+    <style> @keyframes loading { to { width: 100%; } } </style>
 
     <header class="p-4 flex justify-between items-center border-b border-white/5 sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md">
         <div class="flex items-center gap-3">
@@ -70,33 +64,32 @@
         
         <div id="dash" class="tab-content active space-y-6">
             <section class="glass p-6 rounded-[2.5rem] border-t-2 border-cyan-500">
-                <h3 class="text-[10px] font-black uppercase text-cyan-500 mb-4 italic tracking-widest">Bio-Evolução</h3>
                 <div class="grid grid-cols-2 gap-3 mb-6">
                     <div class="bg-slate-800/50 p-3 rounded-2xl border border-white/5">
-                        <p class="text-[8px] uppercase text-slate-500 mb-1">Peso (kg)</p>
-                        <input type="number" id="user-weight" placeholder="00" class="bg-transparent w-full text-sm font-black outline-none">
+                        <p class="text-[8px] uppercase text-slate-500 mb-1 italic">Peso (kg)</p>
+                        <input type="number" id="user-weight" placeholder="00" class="bg-transparent w-full text-sm font-black outline-none" onchange="db.peso=this.value; salvar();">
                     </div>
                     <div class="bg-slate-800/50 p-3 rounded-2xl border border-white/5">
-                        <p class="text-[8px] uppercase text-slate-500 mb-1">Gordura (BF%)</p>
-                        <input type="number" id="user-bf" placeholder="00" class="bg-transparent w-full text-sm font-black outline-none">
+                        <p class="text-[8px] uppercase text-slate-500 mb-1 italic">Gordura (BF%)</p>
+                        <input type="number" id="user-bf" placeholder="00" class="bg-transparent w-full text-sm font-black outline-none" onchange="db.bf=this.value; salvar();">
                     </div>
                 </div>
-                <div class="grid grid-cols-2 gap-2 mb-6">
-                    <button onclick="setMeta('Ganhar Massa')" id="m-Ganhar" class="bg-slate-800 py-4 rounded-2xl text-[9px] font-black uppercase transition-all">Ganhar Massa</button>
-                    <button onclick="setMeta('Perder Peso')" id="m-Perder" class="bg-slate-800 py-4 rounded-2xl text-[9px] font-black uppercase transition-all">Perder Peso</button>
+                <div class="grid grid-cols-2 gap-2 mb-6 text-center">
+                    <button onclick="setMeta('Ganhar Massa')" id="m-Ganhar" class="bg-slate-800 p-3 rounded-xl text-[9px] font-black uppercase">Ganhar Massa</button>
+                    <button onclick="setMeta('Perder Peso')" id="m-Perder" class="bg-slate-800 p-3 rounded-xl text-[9px] font-black uppercase">Perder Peso</button>
                 </div>
                 <div class="grid grid-cols-3 gap-2 mb-6">
-                    <button onclick="setLevel('Iniciante')" id="l-Iniciante" class="bg-slate-800 py-3 rounded-xl text-[8px] font-black uppercase">Iniciante</button>
-                    <button onclick="setLevel('Intermediário')" id="l-Intermediário" class="bg-slate-800 py-3 rounded-xl text-[8px] font-black uppercase">Pro</button>
-                    <button onclick="checkElite()" id="l-Elite" class="bg-slate-800 py-3 rounded-xl text-[8px] font-black uppercase text-orange-500">Elite 🔒</button>
+                    <button onclick="setLevel('Iniciante')" id="l-Iniciante" class="bg-slate-800 p-3 rounded-xl text-[8px] font-black uppercase">Iniciante</button>
+                    <button onclick="setLevel('Intermediário')" id="l-Intermediário" class="bg-slate-800 p-3 rounded-xl text-[8px] font-black uppercase">Pro</button>
+                    <button onclick="checkElite()" id="l-Elite" class="bg-slate-800 p-3 rounded-xl text-[8px] font-black uppercase text-orange-400">Elite 🔒</button>
                 </div>
-                <button onclick="gerarAgenda()" class="w-full bg-cyan-600 py-5 rounded-[2rem] font-black text-xs uppercase shadow-xl">Sincronizar Nexus Core</button>
+                <button onclick="gerarAgenda()" class="w-full bg-cyan-600 py-5 rounded-[2rem] font-black text-xs uppercase shadow-xl hover:scale-95 transition-all">Sincronizar Nexus AI</button>
             </section>
         </div>
 
         <div id="treinos" class="tab-content space-y-4">
             <div id="rest-timer-box" class="hidden glass p-4 rounded-2xl text-center border-b-2 border-orange-500">
-                <p class="text-[10px] font-black text-orange-500 uppercase tracking-widest">Descanso Ativo</p>
+                <p class="text-[10px] font-black text-orange-500 uppercase tracking-widest">Descanso</p>
                 <p id="timer-display" class="text-3xl font-black text-white">00:45</p>
             </div>
             <div id="agenda-lista" class="space-y-4"></div>
@@ -105,8 +98,7 @@
         <div id="pro-features" class="tab-content">
             <div id="nutri-lock" class="glass p-10 rounded-[3rem] text-center border-2 border-orange-500/20">
                 <h2 class="text-xl font-black uppercase text-orange-500 italic">Bio-Nutrição IA</h2>
-                <p class="text-[10px] text-slate-500 mt-2 mb-6">Planos calculados para seu peso real.</p>
-                <button onclick="abrirModal()" class="premium-gradient px-8 py-4 rounded-2xl font-black text-xs uppercase">Liberar Acesso</button>
+                <button onclick="abrirModal()" class="premium-gradient mt-6 px-8 py-4 rounded-2xl font-black text-xs uppercase shadow-lg">Liberar Acesso</button>
             </div>
             <div id="nutri-content" class="hidden space-y-4">
                 <div id="nutri-render" class="space-y-3"></div>
@@ -114,17 +106,17 @@
         </div>
 
         <div id="social" class="tab-content space-y-4">
-            <div class="glass p-6 rounded-[2.5rem] border-t-2 border-cyan-500 text-center">
-                <h2 class="text-sm font-black uppercase text-cyan-500 mb-6 italic tracking-widest">Global Leaderboard</h2>
+            <div class="glass p-6 rounded-[2.5rem] border-t-2 border-cyan-500">
+                <h2 class="text-sm font-black uppercase text-cyan-500 mb-6 italic text-center">Ranking Global</h2>
                 <div id="leaderboard" class="space-y-2"></div>
             </div>
         </div>
 
         <div id="comunidade" class="tab-content space-y-4">
             <div class="glass p-6 rounded-[2.5rem] border-t-2 border-purple-500">
-                <h2 class="text-sm font-black uppercase text-purple-500 mb-6 italic text-center">Nexus Hub 🌐</h2>
-                <textarea id="msg-input" placeholder="O que você treinou hoje?" class="w-full bg-slate-800/50 p-4 rounded-2xl text-[10px] text-white outline-none mb-3 h-20 border border-white/5"></textarea>
-                <button onclick="postarMensagem()" class="w-full bg-purple-600 py-3 rounded-xl font-black text-[10px] uppercase shadow-lg shadow-purple-500/20">Publicar no Feed</button>
+                <h2 class="text-sm font-black uppercase text-purple-500 mb-6 italic text-center text-center">Nexus Hub 🌐</h2>
+                <textarea id="msg-input" placeholder="Dica de treino ou conquista?" class="w-full bg-slate-800/50 p-4 rounded-2xl text-[10px] text-white outline-none mb-3 h-20 border border-white/5"></textarea>
+                <button onclick="postarMensagem()" class="w-full bg-purple-600 py-3 rounded-xl font-black text-[10px] uppercase shadow-lg shadow-purple-500/20">Publicar</button>
                 <div id="feed-comunidade" class="mt-8 space-y-4"></div>
             </div>
         </div>
@@ -136,29 +128,130 @@
                 <h2 class="text-2xl font-black uppercase italic text-white mb-2">Nexus Pro 👑</h2>
                 <p class="text-3xl font-black text-white mb-6">R$ 19,90</p>
                 <button onclick="fluxoPixTracker()" class="w-full premium-gradient py-5 rounded-2xl font-black text-xs uppercase">Gerar Chave Pix</button>
-                <button onclick="fecharModal()" class="block w-full mt-4 text-[10px] text-slate-500 uppercase font-bold">Agora não</button>
+                <button onclick="fecharModal()" class="block w-full mt-4 text-[10px] text-slate-500 uppercase font-bold">Voltar</button>
             </div>
             <div id="step-checkout" style="display: none;">
                 <div class="bg-white p-3 rounded-2xl w-44 mx-auto mb-4"><img id="qr-image" class="w-full"></div>
                 <div class="bg-black/50 p-2 rounded-xl border border-white/5 mb-4 font-mono text-[6px] text-cyan-400 break-all" id="pix-string"></div>
                 <button onclick="copiarPix()" class="w-full bg-slate-800 py-3 rounded-xl text-[9px] font-black uppercase mb-2 italic">Copiar Chave</button>
-                <button onclick="verificarPagamentoTracker()" class="w-full bg-green-600 py-4 rounded-2xl text-[10px] font-black uppercase">Confirmar</button>
+                <button onclick="verificarPagamentoTracker()" class="w-full bg-green-600 py-4 rounded-2xl text-[10px] font-black uppercase">Confirmar Comprovante</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Splash Controller
-        window.addEventListener('load', () => { setTimeout(() => { document.getElementById('splash-screen').classList.add('hide-splash'); }, 3000); });
-
+        // CONFIGURAÇÕES MESTRE
         const CHAVE_PIX = "Nandogabriel.1710@gmail.com";
         const WHATSAPP = "5511994025686";
         const NOME = "Fernando Gabriel";
 
-        let db = JSON.parse(localStorage.getItem('Nexus_v12_Final')) || { xp: 0, isPro: false, level: 'Iniciante', meta: 'Ganhar Massa', peso: '', bf: '' };
+        let db = JSON.parse(localStorage.getItem('Nexus_v12_Master')) || { xp: 0, isPro: false, level: 'Iniciante', meta: 'Ganhar Massa', peso: '', bf: '' };
         let mensagensHub = JSON.parse(localStorage.getItem('nexus_hub')) || [
-            {nome: 'Professor Vagner', msg: 'A consistência vence o talento!', selo: '🎓', cor: 'text-cyan-400'},
-            {nome: 'Marcos Elite', msg: 'Treino de hoje pago! ⚡', selo: '💎', cor: 'text-orange-400'}
+            {nome: 'Professor Vagner', msg: 'A disciplina é a chave!', selo: '🎓', cor: 'text-cyan-400'},
+            {nome: 'Marcos Elite', msg: 'Protocolo de hoje concluído ⚡', selo: '💎', cor: 'text-orange-400'}
         ];
 
-        function salvar() { localStorage.setItem('Nexus_v12_Final', JSON.stringify(db)); localStorage.setItem
+        function salvar() { localStorage.setItem('Nexus_v12_Master', JSON.stringify(db)); localStorage.setItem('nexus_hub', JSON.stringify(mensagensHub)); }
+
+        // EXERCÍCIOS v11
+        const EXERCICIOS = {
+            'Iniciante': [{n: 'Flexão', s: '3x12', x: 25}, {n: 'Agachamento', s: '3x15', x: 25}],
+            'Intermediário': [{n: 'Supino', s: '4x10', x: 50}, {n: 'Puxada Frontal', s: '4x10', x: 50}],
+            'Elite': [{n: 'Muscle-Up', s: '4x5', x: 150}, {n: 'Deadlift', s: '5x5', x: 200}],
+            'vagner': [{n: 'Mestre: Clean & Jerk', s: '5x5', x: 500}, {n: 'Mestre: Human Flag', s: '30s', x: 500}]
+        };
+
+        // UI E ABAS
+        window.addEventListener('load', () => { setTimeout(() => { document.getElementById('splash-screen').classList.add('hide-splash'); }, 1000); });
+
+        function atualizarUI() {
+            document.getElementById('xp-display').innerText = `XP: ${db.xp.toLocaleString()}`;
+            document.getElementById('user-tier').innerText = db.isPro ? "PRO 👑" : "Basic";
+            document.getElementById('user-weight').value = db.peso;
+            document.getElementById('user-bf').value = db.bf;
+
+            document.getElementById('m-Ganhar').className = db.meta === 'Ganhar Massa' ? 'bg-cyan-600 text-slate-950 p-3 rounded-xl text-[9px] font-black uppercase' : 'bg-slate-800 p-3 rounded-xl text-[9px] font-black uppercase';
+            document.getElementById('m-Perder').className = db.meta === 'Perder Peso' ? 'bg-cyan-600 text-slate-950 p-3 rounded-xl text-[9px] font-black uppercase' : 'bg-slate-800 p-3 rounded-xl text-[9px] font-black uppercase';
+
+            if(db.isPro) {
+                document.getElementById('btn-upgrade').style.display = 'none';
+                document.getElementById('nutri-lock').style.display = 'none';
+                document.getElementById('nutri-content').classList.remove('hidden');
+                renderNutri();
+            }
+            renderRanking();
+            renderHub();
+        }
+
+        // NUTRIÇÃO v11
+        function renderNutri() {
+            const p = parseFloat(db.peso) || 70;
+            const prot = Math.round(p * 2.1);
+            const lista = db.meta === 'Ganhar Massa' ? ['Café: 4 Ovos + Aveia', 'Almoço: 200g Frango + Arroz'] : ['Café: 2 Ovos + Fruta', 'Almoço: 150g Peixe + Salada'];
+            document.getElementById('nutri-render').innerHTML = `<div class='bg-slate-800 p-4 rounded-2xl text-center text-[10px] font-black uppercase'>Bio-Meta: ${prot}g Proteína/dia</div>` + lista.map(i => `<div class='glass p-4 rounded-2xl border-l-4 border-orange-500 text-[10px] italic'>${i}</div>`).join('');
+        }
+
+        // TREINOS v11
+        function gerarAgenda() {
+            const lista = document.getElementById('agenda-lista');
+            lista.innerHTML = `<h3 class='text-[10px] font-black text-cyan-500 uppercase italic'>Nexus Core: ${db.level}</h3>`;
+            EXERCICIOS[db.level].forEach(ex => {
+                lista.innerHTML += `<div class='glass p-5 rounded-[2rem] border-l-4 border-cyan-500 flex justify-between items-center'><div class='text-[10px] font-black uppercase'>${ex.n}<br><span class='text-slate-500'>${ex.s}</span></div><div class='flex gap-2'><button onclick='iniciarDescanso()' class='p-2 bg-slate-800 rounded-full'>⏱️</button><button onclick='this.innerText="🏆"; db.xp+=${ex.x}; salvar(); atualizarUI();' class='p-2 bg-cyan-600/20 rounded-full'>✅</button></div></div>`;
+            });
+            openTab(null, 'treinos');
+        }
+
+        function iniciarDescanso() {
+            let tempo = 45; document.getElementById('rest-timer-box').classList.remove('hidden');
+            let timer = setInterval(() => {
+                tempo--; document.getElementById('timer-display').innerText = `00:${tempo.toString().padStart(2,'0')}`;
+                if(tempo <= 0) { clearInterval(timer); document.getElementById('rest-timer-box').classList.add('hidden'); alert("Aqueça!"); }
+            }, 1000);
+        }
+
+        // HUB v12
+        function postarMensagem() {
+            const input = document.getElementById('msg-input');
+            if(!input.value) return;
+            mensagensHub.unshift({ nome: db.isPro ? 'Atleta Pro' : 'Membro', msg: input.value, selo: db.isPro ? '💎' : '⚡', cor: db.isPro ? 'text-orange-400' : 'text-slate-400' });
+            if(mensagensHub.length > 6) mensagensHub.pop();
+            salvar(); input.value = ''; renderHub();
+        }
+
+        function renderHub() {
+            document.getElementById('feed-comunidade').innerHTML = mensagensHub.map(m => `<div class='glass p-4 rounded-2xl border-l-2 border-purple-500'><span class='text-[9px] font-black uppercase ${m.cor}'>${m.selo} ${m.nome}</span><p class='text-[10px] italic mt-1'>${m.msg}</p></div>`).join('');
+        }
+
+        function renderRanking() {
+            const users = [{n: 'Vagner', x: 999999, s: '🎓'}, {n: 'Você', x: db.xp, s: '⚡'}].sort((a,b) => b.x - a.x);
+            document.getElementById('leaderboard').innerHTML = users.map((u, i) => `<div class='flex justify-between bg-slate-800/50 p-3 rounded-xl text-[10px] font-black'><span>#${i+1} ${u.s} ${u.n}</span><span class='text-cyan-400'>${u.x.toLocaleString()} XP</span></div>`).join('');
+        }
+
+        // PIX v10
+        function fluxoPixTracker() {
+            const pStr = `00020126360014br.gov.bcb.pix01${CHAVE_PIX.length}${CHAVE_PIX}520400005303986540519.905802BR59${NOME.length}${NOME}6009SAO PAULO62070503***6304`;
+            document.getElementById('pix-string').innerText = pStr;
+            document.getElementById('qr-image').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(pStr)}`;
+            document.getElementById('step-offer').style.display = 'none';
+            document.getElementById('step-checkout').style.display = 'block';
+        }
+
+        function verificarPagamentoTracker() {
+            window.open(`https://wa.me/${WHATSAPP}?text=Gerei o Pix no Nexus v12.5 Master!`, '_blank');
+        }
+
+        // AUXILIARES
+        function checkElite() { if(db.isPro) { db.level='Elite'; salvar(); atualizarUI(); gerarAgenda(); } else { abrirModal(); } }
+        function setMeta(m) { db.meta = m; salvar(); atualizarUI(); }
+        function setLevel(l) { db.level = l; salvar(); atualizarUI(); }
+        function openTab(evt, t) { document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active")); document.querySelectorAll(".tab-link").forEach(l => l.classList.remove("active-tab")); document.getElementById(t).classList.add("active"); if(evt) evt.currentTarget.classList.add("active-tab"); }
+        function abrirModal() { document.getElementById('modal-payment').style.display = 'flex'; }
+        function fecharModal() { document.getElementById('modal-payment').style.display = 'none'; }
+        function copiarPix() { navigator.clipboard.writeText(document.getElementById('pix-string').innerText); alert("Pix Copiado!"); }
+        function tentarLoginAdmin() { let p = prompt("Senha:"); if(p === "1234") { db.isPro=true; db.level='vagner'; salvar(); atualizarUI(); } }
+
+        window.onload = atualizarUI;
+    </script>
+</body>
+    </html>
+    
